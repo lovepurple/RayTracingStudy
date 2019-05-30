@@ -23,10 +23,10 @@ public:
 	inline float operator[](int i) const { return e[i]; }			//C++啥都能重载。。。
 	inline float& operator[](int i) { return e[i]; }				//一个有const 一个没有
 
-	inline vec3& operator+=(const vec3 &v2);			//声明方法签名
-	inline vec3& operator-=(const vec3 &v2);
-	inline vec3& operator*=(const vec3 &v2);
-	inline vec3& operator/=(const vec3 &v2);
+	inline vec3& operator+=(const vec3& v2);			//声明方法签名
+	inline vec3& operator-=(const vec3& v2);
+	inline vec3& operator*=(const vec3& v2);
+	inline vec3& operator/=(const vec3& v2);
 	inline vec3& operator*=(const float f);
 	inline vec3& operator/=(const float f);
 
@@ -48,14 +48,14 @@ public:
 
 
 //input stream
-inline std::istream& operator>>(std::istream &is, vec3 &t)
+inline std::istream& operator>>(std::istream& is, vec3& t)
 {
 	is >> t.e[0] >> t.e[1] >> t.e[2];
 	return is;
 }
 
 //output stream
-inline std::ostream& operator<<(std::ostream &os, const vec3 &t)
+inline std::ostream& operator<<(std::ostream& os, const vec3& t)
 {
 	os << t.e[0] << " " << t.e[1] << " " << t.e[2];
 }

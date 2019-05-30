@@ -2,10 +2,12 @@
 #include <fstream>
 #include "ray.h"
 
+#define RENDER_IMAGE_WIDTH 256
+#define RENDER_IMAGE_HEIGHT 256
 #define cout fout
 
 
-bool hit_sphere(const vec3& center, float sphereRadius, const ray& r) {
+bool hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
 	//直线方程和圆方程联立，中间步骤省略
 	vec3 origin_to_center = r.origin() - center;
 	float a = dot(r.direction(), r.direction());
@@ -29,12 +31,15 @@ vec3 color(const ray& r) {
 }
 
 int main() {
-	int nx = 200;
-	int ny = 1;
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
 
 	//以PPM格式记录
-	cout << "P3 \n" << nx << " " << ny << "\n255\n";
+	cout << "P3 \n" << RENDER_IMAGE_WIDTH << " " << RENDER_IMAGE_HEIGHT << "\n255\n";
+
+
+
+
+
 
 	/*for (int j = ny - 1; j >= 0; j--)
 	{
@@ -48,19 +53,6 @@ int main() {
 			cout << ir << " " << ig << " " << " " << ib << std::endl;
 		}
 	}*/
-	for (int i = 0; i < nx; ++i)
-	{
-		for (int j = 0; j < ny; ++j)
-		{
-			vec3 col(float(i) / float(nx), (1 - float(j) / float(ny)), 0);
-			int ir = int(255.99 * col[0]);
-			int ig = int(255.99 * col[1]);
-			int ib = int(255.99 * col[2]);
-
-			cout << ir << " " << ig << " " << " " << ib << std::endl;
-		}
-	}
-
 
 	/*
 
