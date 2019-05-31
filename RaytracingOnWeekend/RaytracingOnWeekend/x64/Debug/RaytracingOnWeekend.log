@@ -1,0 +1,9 @@
+﻿  ray.cpp
+E:\Repository\RayTracingStudy\RaytracingOnWeekend\RaytracingOnWeekend\Vec3.h(65,10): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+  ray_trace_main.cpp
+E:\Repository\RayTracingStudy\RaytracingOnWeekend\RaytracingOnWeekend\Vec3.h(169,11): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Repository\RayTracingStudy\RaytracingOnWeekend\RaytracingOnWeekend\Vec3.h(65,10): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+E:\Repository\RayTracingStudy\RaytracingOnWeekend\RaytracingOnWeekend\Vec3.h(169,11): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+E:\Repository\RayTracingStudy\RaytracingOnWeekend\RaytracingOnWeekend\ray_trace_main.cpp(14,10): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+  RaytracingOnWeekend.vcxproj -> E:\Repository\RayTracingStudy\RaytracingOnWeekend\x64\Debug\RaytracingOnWeekend.exe

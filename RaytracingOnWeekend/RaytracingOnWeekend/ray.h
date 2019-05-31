@@ -14,7 +14,5 @@ public:
 
 	vec3 A;
 	vec3 B;
-
-	vec3 toColor();
 };
 
