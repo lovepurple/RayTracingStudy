@@ -8,8 +8,9 @@
 class vec3
 {
 public:
-	vec3(){}
+	vec3() {}
 	vec3(float e0, float e1, float e2) { e[0] = e0, e[1] = e1, e[2] = e2; }
+	vec3(float e0, float e1) { e[0] = e0, e[1] = e1, e[2] = 0; }
 
 	inline float x() const { return e[0]; }
 	inline float y() const { return e[1]; }
@@ -41,6 +42,7 @@ public:
 	}
 
 	inline void make_unit_vector();			//inline 在编译时，会自动展开，适合操作比较简单的函数。
+
 
 
 	float e[3];
@@ -116,6 +118,18 @@ inline vec3 cross(const vec3& v1, const vec3& v2)
 		(v1.e[0] * v2.e[1] - v2.e[0] * v1.e[1]));
 }
 
+//调用的时候不需要vec3:: 理解，只要是include这个头 该函数就有了
+inline float square_distance(const vec3& v1, const vec3& v2) {
+	vec3 v2Tov1 = v2 - v1;
+	return dot(v2Tov1,v2Tov1);
+}
+
+inline float distance(const vec3& v1, const vec3& v2) {
+	return sqrt(square_distance(v1, v2));
+}
+
+ 
+
 //实现定义的方法体
 inline vec3& vec3::operator +=(const vec3& v)
 {
@@ -180,6 +194,10 @@ inline vec3 unit_vector(vec3 v)
 	return v / v.length();
 }
 
-
+/*
+std::ostream& operator<<(std::ostream& out, vec3& v) {
+	std::cout << v.e[0] << "," << v.e[1] << "," << v.e[2] << std::endl;
+	return out;
+}*/
 
 #endif
