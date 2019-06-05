@@ -31,6 +31,7 @@ public:
 	inline vec3& operator*=(const float f);
 	inline vec3& operator/=(const float f);
 
+
 	inline float length() const			//C++ 1. 函数后加const 作用是声明函数为只读函数，只有const 成员才能调用 2.此函数不能修改成员变量的值。
 	{
 		return sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]);		//这里直接返回了一个float指，并没修改函数中的成员
@@ -73,6 +74,11 @@ inline void vec3::make_unit_vector()
 inline vec3 operator+(const vec3& v1, const vec3& v2)
 {
 	return vec3(v1.e[0] + v2.e[0], v1.e[1] + v2.e[1], v1.e[2] + v2.e[2]);
+}
+
+inline vec3 operator+(const vec3& v1, const float constValue)
+{
+	return vec3(v1.e[0] + constValue, v1.e[1] + constValue, v1.e[2] + constValue);
 }
 
 inline vec3 operator-(const vec3& v1, const vec3& v2)
@@ -121,14 +127,14 @@ inline vec3 cross(const vec3& v1, const vec3& v2)
 //调用的时候不需要vec3:: 理解，只要是include这个头 该函数就有了
 inline float square_distance(const vec3& v1, const vec3& v2) {
 	vec3 v2Tov1 = v2 - v1;
-	return dot(v2Tov1,v2Tov1);
+	return dot(v2Tov1, v2Tov1);
 }
 
 inline float distance(const vec3& v1, const vec3& v2) {
 	return sqrt(square_distance(v1, v2));
 }
 
- 
+
 
 //实现定义的方法体
 inline vec3& vec3::operator +=(const vec3& v)
@@ -192,6 +198,10 @@ inline vec3& vec3::operator /=(const float t)
 inline vec3 unit_vector(vec3 v)
 {
 	return v / v.length();
+}
+
+inline vec3 toColor(const vec3& v) {
+	return (v + 1.0) * 0.5f;
 }
 
 /*

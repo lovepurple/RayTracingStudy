@@ -13,7 +13,7 @@ vec3 normalizeUVtoRealCoord(const vec3 & normalizedUV) {
 }
 
 
-bool hit_sphere(const vec3& center, float sphereRadius, const ray& r) {
+float hit_sphere(const vec3& center, float sphereRadius, const ray& r) {
 	//直线方程和圆方程联立，中间步骤省略
 	//对于渲染出的图，sphereRadius使用的是物理的距离，并不是实际像素的半径，要进行uv变换
 	//球方程 (x-x0)^2 + (y-y0)^2 + (z-z0)^2 = R*R
@@ -24,7 +24,11 @@ bool hit_sphere(const vec3& center, float sphereRadius, const ray& r) {
 
 	float discriminant = b * b - 4 * a * c;
 
-	return discriminant >= 0;
+	//计算射线与球的相交点
+	if (discriminant < 0)
+		return -1;
+	else
+		return (-b - sqrt(discriminant)) / (2.0 * a);
 }
 
 
@@ -32,14 +36,21 @@ vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
 	vec3 sphereCenter = normalizeUVtoRealCoord(vec3(0.5, 0.5, -1));
 
 	//todo:使用半径为0.5时会超出区域，原因可能是球有z的方向，在屏幕上投影问题
-	if (hit_sphere(sphereCenter, 0.4, r))
-		return vec3(1, 0, 0);
+
+	//计算相交点
+	float t = hit_sphere(sphereCenter, 0.4, r);
+	if (t > 0.0f)
+	{
+		vec3 hitPointOnSphere = r.point_at_parameter(t);
+		vec3 sphereNormal = unit_vector(hitPointOnSphere - sphereCenter);
+		return toColor(sphereNormal);
+	}
 
 
 	vec3 normalized_direction = unit_vector(r.direction());
-	float t = (normalized_direction.y() + 1.0f) * 0.5f;			//（-1,1） to color
+	float backgroundLerpFactor = (normalized_direction.y() + 1.0f) * 0.5f;			//（-1,1） to color
 
-	return (1.0f - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1);		//lerp(vec3(1,1,1),vec3(0.5,0.7,1),t)
+	return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);		//lerp(vec3(1,1,1),vec3(0.5,0.7,1),t)
 }
 
 vec3 lerp(const vec3& a, const vec3& b, float factor) {
