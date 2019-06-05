@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include "ray.h"
+#include "Sphere.h"
+#include "HitableList.h"
+#include "float.h"
+
 
 #define DOWNLOAD_SAMPLE_RATIO 1
 #define RENDER_IMAGE_WIDTH 1920.0/DOWNLOAD_SAMPLE_RATIO
@@ -31,6 +34,23 @@ float hit_sphere(const vec3& center, float sphereRadius, const ray& r) {
 		return (-b - sqrt(discriminant)) / (2.0 * a);
 }
 
+/**
+ * world中存的是场景，hitable*实现是hitable_list
+	击中返回击中点法线
+ */
+vec3 color(const ray& ray, Hitable* world) {
+	HitInfo hitInfo;
+	if (world->Hit(ray, 0.0, FLT_MAX, hitInfo)) {
+		return toColor(hitInfo.HitPointNormal);
+	}
+	else
+	{
+		vec3 normalized_direction = unit_vector(ray.direction());
+		float backgroundLerpFactor = (normalized_direction.y() + 1.0f) * 0.5f;			//（-1,1） to color
+
+		return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);		//lerp(vec3(1,1,1),vec3(0.5,0.7,1),t)
+	}
+}
 
 vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
 	vec3 sphereCenter = normalizeUVtoRealCoord(vec3(0.5, 0.5, -1));
@@ -81,6 +101,15 @@ int main() {
 	*/
 	vec3 rayOrigin = normalizeUVtoRealCoord(vec3(0.5, 0.5, 0));
 
+	//构建多个物体
+	Sphere* sphere1 = new Sphere(normalizeUVtoRealCoord(vec3(0.5f, 0.5f, -1)), 0.4f);
+	Sphere* sphere2 = new Sphere(normalizeUVtoRealCoord(vec3(0.5f, -50.0f, -1)), 50.0f);	//特别大的球
+	Hitable* worldObjectList[2];
+	worldObjectList[0] = sphere1;
+	worldObjectList[1] = sphere2;
+
+	HitableList* world = new HitableList(worldObjectList, 2);
+
 
 	//Pixel Coordiate
 	for (int j = RENDER_IMAGE_HEIGHT - 1; j >= 0; j--)
@@ -92,43 +121,17 @@ int main() {
 
 			vec3 pixelUV = normalizeUVtoRealCoord(vec3(texel_u, texel_v, -1));
 			ray rayToPixel = ray(rayOrigin, unit_vector(pixelUV - rayOrigin));
-			vec3 pixelRayDirectionCol = color(rayToPixel);
+			vec3 pixelColor = color(rayToPixel, world);
 
-			int ir = int(255.99 * pixelRayDirectionCol[0]);
-			int ig = int(255.99 * pixelRayDirectionCol[1]);
-			int ib = int(255.99 * pixelRayDirectionCol[2]);
+			int ir = int(255.99 * pixelColor[0]);
+			int ig = int(255.99 * pixelColor[1]);
+			int ib = int(255.99 * pixelColor[2]);
 
 			cout << ir << " " << ig << " " << ib << " ";
 
 		}
 		cout << "\n";
 	}
-	/*
-
-
-
-		vec3 lower_left_corner(-2.0, -1.0, -1.0);
-		vec3 horizontal(4.0, 0, 0);			//屏幕范围
-		vec3 vertical(0, 2.0, 0);
-		vec3 origin(0, 0, 0);
-
-
-		for (int j = ny - 1; j >= 0; j--)
-		{
-			for (int i = 0; i < nx; i++)
-			{
-				float u = float(i) / float(nx);
-				float v = float(j) / float(ny);
-
-				ray r(origin, lower_left_corner + u * horizontal + v * horizontal);
-				vec3 col = color(r);
-				int ir = int(255.99 *col[0]);
-				int ig = int(255.99 *col[1]);
-				int ib = int(255.99 *col[2]);
-
-				cout << ir << " " << ig << " " << ib << "\n";
-			}
-		}*/
 
 	return 0;
 }
