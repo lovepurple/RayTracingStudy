@@ -1,19 +1,15 @@
+#pragma once
 #include <iostream>
 #include <fstream>
 #include "Sphere.h"
 #include "HitableList.h"
 #include "float.h"
+#include "Screen.h"
+#include "Camera.h"
+#include "DRand48.h"
 
-
-#define DOWNLOAD_SAMPLE_RATIO 1
-#define RENDER_IMAGE_WIDTH 1920.0/DOWNLOAD_SAMPLE_RATIO
-#define RENDER_IMAGE_HEIGHT 1200.0/DOWNLOAD_SAMPLE_RATIO
-#define SCREEN_PARAM (RENDER_IMAGE_WIDTH)/(RENDER_IMAGE_HEIGHT)		//宏是直接展开，加不加括号的问题
 #define cout fout
 
-vec3 normalizeUVtoRealCoord(const vec3 & normalizedUV) {
-	return vec3(normalizedUV.x() * SCREEN_PARAM, normalizedUV.y(), normalizedUV.z());
-}
 
 
 float hit_sphere(const vec3& center, float sphereRadius, const ray& r) {
@@ -53,7 +49,7 @@ vec3 color(const ray& ray, Hitable* world) {
 }
 
 vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
-	vec3 sphereCenter = normalizeUVtoRealCoord(vec3(0.5, 0.5, -1));
+	vec3 sphereCenter = Screen::normalizedUVtoReal(vec3(0.5, 0.5, -1));
 
 	//todo:使用半径为0.5时会超出区域，原因可能是球有z的方向，在屏幕上投影问题
 
@@ -66,15 +62,14 @@ vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
 		return toColor(sphereNormal);
 	}
 
-
 	vec3 normalized_direction = unit_vector(r.direction());
 	float backgroundLerpFactor = (normalized_direction.y() + 1.0f) * 0.5f;			//（-1,1） to color
 
 	return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);		//lerp(vec3(1,1,1),vec3(0.5,0.7,1),t)
 }
 
-vec3 lerp(const vec3& a, const vec3& b, float factor) {
-	return (1 - factor) * a + b * factor;
+vec3 lerp(const vec3& vec1, const vec3& vec2, float factor) {
+	return (1 - factor) * vec1 + vec2 * factor;
 }
 
 vec3 pixelToNormalizeUV(int pixelX, int pixelY) {
@@ -99,29 +94,37 @@ int main() {
 			1. 整个屏幕的uv范围是[0,1]正方形 ，但实现屏幕分辨率大多数情况下都是长宽不相等
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
-	vec3 rayOrigin = normalizeUVtoRealCoord(vec3(0.5, 0.5, 0));
+
+	Camera camera = Camera();
 
 	//构建多个物体
-	Sphere* sphere1 = new Sphere(normalizeUVtoRealCoord(vec3(0.5f, 0.5f, -1)), 0.4f);
-	Sphere* sphere2 = new Sphere(normalizeUVtoRealCoord(vec3(0.5f, -50.0f, -1)), 50.0f);	//特别大的球
+	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.4f);
+	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f);	//特别大的球
 	Hitable* worldObjectList[2];
 	worldObjectList[0] = sphere1;
 	worldObjectList[1] = sphere2;
 
 	HitableList* world = new HitableList(worldObjectList, 2);
 
-
 	//Pixel Coordiate
 	for (int j = RENDER_IMAGE_HEIGHT - 1; j >= 0; j--)
 	{
 		for (int i = 0; i < RENDER_IMAGE_WIDTH; ++i)
 		{
-			float texel_u = ((float)i / (RENDER_IMAGE_WIDTH - 1));
-			float texel_v = ((float)j / (RENDER_IMAGE_HEIGHT - 1));
+			//对每个像素内部再随机采样，差值出颜色，抗锯齿
+			vec3 pixelColor = vec3::ZERO;
+			for (int k = 0; k < ANTI_ANTIALIASING_TIMES; ++k)
+			{
+				//获取当前像素的随机采样
+				float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
+				float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
-			vec3 pixelUV = normalizeUVtoRealCoord(vec3(texel_u, texel_v, -1));
-			ray rayToPixel = ray(rayOrigin, unit_vector(pixelUV - rayOrigin));
-			vec3 pixelColor = color(rayToPixel, world);
+				vec3 pixelUV = Screen::normalizedUVtoReal(vec3(texel_u, texel_v, -1));
+				ray cameraRayToPixel = camera.get_ray(pixelUV.x(), pixelUV.y());
+				pixelColor += color(cameraRayToPixel, world);
+			}
+			pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
+
 
 			int ir = int(255.99 * pixelColor[0]);
 			int ig = int(255.99 * pixelColor[1]);

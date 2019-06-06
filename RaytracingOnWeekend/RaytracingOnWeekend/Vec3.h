@@ -47,6 +47,7 @@ public:
 
 
 	float e[3];
+	static vec3 ZERO;
 };
 
 
