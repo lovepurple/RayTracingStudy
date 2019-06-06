@@ -1,5 +1,0 @@
-﻿  OutputPPM.cpp
-E:\Repository\RayTracingStudy\RaytracingOnWeekend\OutputPPM\OutputPPM.cpp(22,13): warning C4244:  'initializing': conversion from 'double' to 'int', possible loss of data
-E:\Repository\RayTracingStudy\RaytracingOnWeekend\OutputPPM\OutputPPM.cpp(26,10): warning C4244:  'initializing': conversion from 'double' to 'int', possible loss of data
-E:\Repository\RayTracingStudy\RaytracingOnWeekend\OutputPPM\OutputPPM.cpp(27,10): warning C4244:  'initializing': conversion from 'double' to 'int', possible loss of data
-  OutputPPM.vcxproj -> E:\Repository\RayTracingStudy\RaytracingOnWeekend\Debug\OutputPPM.exe
