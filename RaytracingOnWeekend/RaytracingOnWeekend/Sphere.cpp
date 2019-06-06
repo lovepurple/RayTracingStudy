@@ -21,6 +21,8 @@ bool Sphere::Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) con
 			ContructHitInfo(hitInfo, ray, rootA);
 		else if (rootB<t_max && rootB >t_min)
 			ContructHitInfo(hitInfo, ray, rootB);
+		else
+			return false;
 
 		return true;
 	}
