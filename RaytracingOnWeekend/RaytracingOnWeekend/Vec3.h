@@ -206,6 +206,15 @@ inline vec3 toColor(const vec3& v) {
 	return (v + 1.0) * 0.5f;
 }
 
+inline vec3 toGammaColor(vec3& v, float gammaValue) {
+	vec3 gammaColor = toColor(v);
+	gammaColor.e[0] = pow(gammaColor.e[0], gammaValue);
+	gammaColor.e[1] = pow(gammaColor.e[1], gammaValue);
+	gammaColor.e[2] = pow(gammaColor.e[2], gammaValue);
+
+	return gammaColor;
+}
+
 /*
 std::ostream& operator<<(std::ostream& out, vec3& v) {
 	std::cout << v.e[0] << "," << v.e[1] << "," << v.e[2] << std::endl;

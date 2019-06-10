@@ -163,6 +163,8 @@ int main() {
 			}
 			pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
 
+			//gammaæ¿’˝£¨ color ^ 1/gamma,Ã·¡¡∞µ≤ø
+			//pixelColor = toGammaColor(pixelColor, 0.5f);
 
 			int ir = int(255.99 * pixelColor[0]);
 			int ig = int(255.99 * pixelColor[1]);
