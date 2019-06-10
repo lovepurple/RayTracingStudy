@@ -9,10 +9,10 @@
 #include "DRand48.h"
 
 #define cout fout
+#define MAX_REFLECT_TIMES 500		//最多反射次数（防止栈溢出）
 
 
-
-float hit_sphere(const vec3& center, float sphereRadius, const ray& r) {
+float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
 	//直线方程和圆方程联立，中间步骤省略
 	//对于渲染出的图，sphereRadius使用的是物理的距离，并不是实际像素的半径，要进行uv变换
 	//球方程 (x-x0)^2 + (y-y0)^2 + (z-z0)^2 = R*R
@@ -31,17 +31,47 @@ float hit_sphere(const vec3& center, float sphereRadius, const ray& r) {
 }
 
 /**
+ * hitpoint 上取出一个随机方向作为反射方法，继续反射
+	并没有使用物理意义上的Reflect(IncidentRay,Normal)作为反射方向
+
+ */
+vec3 random_direction_in_unit_sphere() {
+	//[-1,1]
+	vec3 reflectDir = 2.0f * vec3(DRand48::drand48(), DRand48::drand48(), DRand48::drand48()) - vec3::ONE;
+	return reflectDir;
+}
+int m_reflectTimes = 0;
+/**
  * world中存的是场景，hitable*实现是hitable_list
 	击中返回击中点法线
  */
-vec3 color(const ray& ray, Hitable* world) {
+vec3 color(const ray& tracingRay, Hitable* world) {
 	HitInfo hitInfo;
-	if (world->Hit(ray, 0.0, FLT_MAX, hitInfo)) {
-		return toColor(hitInfo.HitPointNormal);
+	if (world->Hit(tracingRay, 0.0, FLT_MAX, hitInfo)) {
+		m_reflectTimes++;
+		//return toColor(hitInfo.HitPointNormal);
+
+		//击中之后取随机方向继续跟踪，直到不击中
+		vec3 reflectDir = hitInfo.HitPoint + hitInfo.HitPointNormal + random_direction_in_unit_sphere();
+
+		ray reflectRayFromHitpoint = ray(hitInfo.HitPoint, unit_vector(reflectDir));
+
+		/*递归调用，对于C++ 默认栈的大小是1M，多次反射在分辨率高的情况下（递归次数过多），极有可能出现栈溢出的情况
+				Properties->Linker->System -> Stack Reseve Size 修改栈的大小 （单位是字节 byte ）
+				也可以用指针解决，在堆中分配内存
+		*/
+
+		//每次击中，变暗一半
+
+		if (m_reflectTimes > MAX_REFLECT_TIMES)
+			return vec3::ZERO;
+
+		return 0.5f * color(reflectRayFromHitpoint, world);
+
 	}
 	else
 	{
-		vec3 normalized_direction = unit_vector(ray.direction());
+		vec3 normalized_direction = unit_vector(tracingRay.direction());			//C++里名不能重复，函数参数名不能跟类名一样
 		float backgroundLerpFactor = (normalized_direction.y() + 1.0f) * 0.5f;			//（-1,1） to color
 
 		return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);		//lerp(vec3(1,1,1),vec3(0.5,0.7,1),t)
@@ -83,11 +113,15 @@ vec3 uvToPixel(const vec3& uv) {
 }
 
 
+
+
 int main() {
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
 
+
 	//以PPM格式记录
 	cout << "P3 \n" << RENDER_IMAGE_WIDTH << " " << RENDER_IMAGE_HEIGHT << "\n255\n";
+
 
 	/*
 		关于uv*screenParam的理解：
@@ -115,12 +149,16 @@ int main() {
 			vec3 pixelColor = vec3::ZERO;
 			for (int k = 0; k < ANTI_ANTIALIASING_TIMES; ++k)
 			{
+				if (i == 316 && j == 149 && k == 4)
+					int h = 10;
+
 				//获取当前像素的随机采样
 				float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
 				float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
 				vec3 pixelUV = Screen::normalizedUVtoReal(vec3(texel_u, texel_v, -1));
 				ray cameraRayToPixel = camera.get_ray(pixelUV.x(), pixelUV.y());
+				m_reflectTimes = 0;
 				pixelColor += color(cameraRayToPixel, world);
 			}
 			pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
