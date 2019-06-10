@@ -1,16 +1,17 @@
 #pragma once
 #include "ray.h"
+#include "Material.h"
 
 /*
 	抽象类，用于描述是光线是否击中物理
 */
-
 
 struct HitInfo
 {
 	float HitRay_Factor;
 	vec3 HitPoint;
 	vec3 HitPointNormal;
+	Material* mat_ptr;		//所属材质，当多处引用一个对象时，使用指针
 };
 
 

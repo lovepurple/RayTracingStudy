@@ -7,6 +7,7 @@
 #include "Screen.h"
 #include "Camera.h"
 #include "DRand48.h"
+#include "Utility.h"
 
 #define cout fout
 #define MAX_REFLECT_TIMES 500		//最多反射次数（防止栈溢出）
@@ -30,16 +31,7 @@ float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
 		return (-b - sqrt(discriminant)) / (2.0 * a);
 }
 
-/**
- * hitpoint 上取出一个随机方向作为反射方法，继续反射
-	并没有使用物理意义上的Reflect(IncidentRay,Normal)作为反射方向
 
- */
-vec3 random_direction_in_unit_sphere() {
-	//[-1,1]
-	vec3 reflectDir = 2.0f * vec3(DRand48::drand48(), DRand48::drand48(), DRand48::drand48()) - vec3::ONE;
-	return reflectDir;
-}
 int m_reflectTimes = 0;
 /**
  * world中存的是场景，hitable*实现是hitable_list
@@ -52,7 +44,7 @@ vec3 color(const ray& tracingRay, Hitable* world) {
 		//return toColor(hitInfo.HitPointNormal);
 
 		//击中之后取随机方向继续跟踪，直到不击中
-		vec3 reflectDir = hitInfo.HitPoint + hitInfo.HitPointNormal + random_direction_in_unit_sphere();
+		vec3 reflectDir = hitInfo.HitPoint + hitInfo.HitPointNormal + Utility::random_direction_in_unit_sphere();
 
 		ray reflectRayFromHitpoint = ray(hitInfo.HitPoint, unit_vector(reflectDir));
 

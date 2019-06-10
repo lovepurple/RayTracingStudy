@@ -215,6 +215,13 @@ inline vec3 toGammaColor(vec3& v, float gammaValue) {
 	return gammaColor;
 }
 
+/**
+ * ∑¥…‰œÚ¡ø
+ */
+inline vec3 reflect(const vec3& input, const vec3& normal) {
+	return input - 2 * dot(input, normal) * normal;
+}
+
 /*
 std::ostream& operator<<(std::ostream& out, vec3& v) {
 	std::cout << v.e[0] << "," << v.e[1] << "," << v.e[2] << std::endl;
