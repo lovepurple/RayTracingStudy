@@ -222,6 +222,10 @@ inline vec3 reflect(const vec3& input, const vec3& normal) {
 	return input - 2 * dot(input, normal) * normal;
 }
 
+inline  vec3 lerp(const vec3& vec1, const vec3& vec2, float factor) {
+	return (1 - factor) * vec1 + vec2 * factor;
+}
+
 /*
 std::ostream& operator<<(std::ostream& out, vec3& v) {
 	std::cout << v.e[0] << "," << v.e[1] << "," << v.e[2] << std::endl;

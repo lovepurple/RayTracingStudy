@@ -1,6 +1,11 @@
 #pragma once
 #include "ray.h"
-#include "Material.h"
+
+/**
+ * 理解，由于Material.h中需要引用Hitable.h 而 hitable.h又需要include Material.h 造成了循环include
+	所以在这里不去include 直接声明要使用的类，提前告诉编译器要使用的类，而且不能使用类本身，必须要用指针，因类在这里，类还没分配内存，而指针就是占用4个字节固定大小
+ */
+class Material;
 
 /*
 	抽象类，用于描述是光线是否击中物理

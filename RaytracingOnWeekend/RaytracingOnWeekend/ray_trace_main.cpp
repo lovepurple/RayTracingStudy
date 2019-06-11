@@ -8,9 +8,11 @@
 #include "Camera.h"
 #include "DRand48.h"
 #include "Utility.h"
+#include "LambertianMaterial.h"
+#include "MetalMaterial.h"
 
 #define cout fout
-#define MAX_REFLECT_TIMES 500		//最多反射次数（防止栈溢出）
+#define MAX_TRACING_TIMES 10		//最大追踪次数
 
 
 float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
@@ -55,7 +57,7 @@ vec3 color(const ray& tracingRay, Hitable* world) {
 
 		//每次击中，变暗一半
 
-		if (m_reflectTimes > MAX_REFLECT_TIMES)
+		if (m_reflectTimes > MAX_TRACING_TIMES)
 			return vec3::ZERO;
 
 		return 0.5f * color(reflectRayFromHitpoint, world);
@@ -68,6 +70,31 @@ vec3 color(const ray& tracingRay, Hitable* world) {
 
 		return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);		//lerp(vec3(1,1,1),vec3(0.5,0.7,1),t)
 	}
+}
+
+vec3 color(const ray& tracingRay, Hitable* world, int tracingTimes) {
+	HitInfo hitInfo;
+
+	if (world->Hit(tracingRay, 0.0001f, FLT_MAX, hitInfo)) {
+		ray	reflectRay;
+		vec3 attenuation;
+
+		//再一次追踪
+		if (tracingTimes < MAX_TRACING_TIMES && hitInfo.mat_ptr->scatter(tracingRay, hitInfo, attenuation, reflectRay)) {
+			return attenuation * color(reflectRay, world, ++tracingTimes);
+		}
+		else
+			return vec3::ZERO;
+	}
+	else
+	{
+		//相当于Skybox
+		vec3 normalized_direction = unit_vector(tracingRay.direction());
+		float backgroundLerpFactor = (normalized_direction.y() + 1.0f) * 0.5f;
+
+		return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);
+	}
+
 }
 
 vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
@@ -90,9 +117,7 @@ vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
 	return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);		//lerp(vec3(1,1,1),vec3(0.5,0.7,1),t)
 }
 
-vec3 lerp(const vec3& vec1, const vec3& vec2, float factor) {
-	return (1 - factor) * vec1 + vec2 * factor;
-}
+
 
 vec3 pixelToNormalizeUV(int pixelX, int pixelY) {
 
@@ -104,8 +129,24 @@ vec3 uvToPixel(const vec3& uv) {
 	return vec3(uv.x() * RENDER_IMAGE_WIDTH, uv.y() * RENDER_IMAGE_HEIGHT, 0);
 }
 
+HitableList* getHitableWorld(int& worldObjectCount) {
+	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.2f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
+	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
+	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.2f, new MetalMaterial(vec3(0.6, 0.6, 0.2)));
+	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.2f, 0.5f, -1)), 0.2f, new MetalMaterial(vec3(0.8, 0.8, 0.8)));
+	sphere1 = sphere3;
 
+	worldObjectCount = 4;
+	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
+	worldObjectList[0] = sphere1;
+	worldObjectList[1] = sphere2;
+	worldObjectList[2] = sphere3;
+	worldObjectList[3] = sphere4;
 
+	HitableList* world = new HitableList(worldObjectList, 1);
+
+	return world;
+}
 
 int main() {
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
@@ -130,7 +171,10 @@ int main() {
 	worldObjectList[0] = sphere1;
 	worldObjectList[1] = sphere2;
 
-	HitableList* world = new HitableList(worldObjectList, 2);
+	//HitableList* world = new HitableList(worldObjectList, 2);
+	int worldObjectCount = 0;
+	HitableList* world = getHitableWorld(worldObjectCount);
+
 
 	//Pixel Coordiate
 	for (int j = RENDER_IMAGE_HEIGHT - 1; j >= 0; j--)
@@ -141,17 +185,14 @@ int main() {
 			vec3 pixelColor = vec3::ZERO;
 			for (int k = 0; k < ANTI_ANTIALIASING_TIMES; ++k)
 			{
-				if (i == 316 && j == 149 && k == 4)
-					int h = 10;
-
 				//获取当前像素的随机采样
 				float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
 				float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
 				vec3 pixelUV = Screen::normalizedUVtoReal(vec3(texel_u, texel_v, -1));
 				ray cameraRayToPixel = camera.get_ray(pixelUV.x(), pixelUV.y());
-				m_reflectTimes = 0;
-				pixelColor += color(cameraRayToPixel, world);
+
+				pixelColor += color(cameraRayToPixel, world, 0);
 			}
 			pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
 

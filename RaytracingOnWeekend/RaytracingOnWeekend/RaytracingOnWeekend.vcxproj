@@ -129,9 +129,13 @@
     <ClInclude Include="DRand48.h" />
     <ClInclude Include="Hitable.h" />
     <ClInclude Include="HitableList.h" />
+    <ClInclude Include="LambertianMaterial.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MetalMaterial.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Utility.h" />
     <ClInclude Include="Vec3.h" />
   </ItemGroup>
   <ItemGroup>
@@ -139,10 +143,14 @@
     <ClCompile Include="DRand48.cpp" />
     <ClCompile Include="Hitable.cpp" />
     <ClCompile Include="HitableList.cpp" />
+    <ClCompile Include="LambertianMaterial.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MetalMaterial.cpp" />
     <ClCompile Include="ray.cpp" />
     <ClCompile Include="ray_trace_main.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vec3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
