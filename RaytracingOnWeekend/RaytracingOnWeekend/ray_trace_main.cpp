@@ -56,7 +56,6 @@ vec3 color(const ray& tracingRay, Hitable* world) {
 		*/
 
 		//每次击中，变暗一半
-
 		if (m_reflectTimes > MAX_TRACING_TIMES)
 			return vec3::ZERO;
 
@@ -78,13 +77,17 @@ vec3 color(const ray& tracingRay, Hitable* world, int tracingTimes) {
 	if (world->Hit(tracingRay, 0.0001f, FLT_MAX, hitInfo)) {
 		ray	reflectRay;
 		vec3 attenuation;
+		hitInfo.mat_ptr->scatter(tracingRay, hitInfo, attenuation, reflectRay);
 
-		//再一次追踪
-		if (tracingTimes < MAX_TRACING_TIMES && hitInfo.mat_ptr->scatter(tracingRay, hitInfo, attenuation, reflectRay)) {
+		//光线根据击中材质的不同进一步散射
+		/*if (tracingTimes < MAX_TRACING_TIMES && hitInfo.mat_ptr->scatter(tracingRay, hitInfo, attenuation, reflectRay)) {
 			return attenuation * color(reflectRay, world, ++tracingTimes);
-		}
-		else
-			return vec3::ZERO;
+		}*/
+		return toColor(reflectRay.direction());
+
+
+		//else
+		//	return vec3::ONE;
 	}
 	else
 	{
@@ -132,9 +135,11 @@ vec3 uvToPixel(const vec3& uv) {
 HitableList* getHitableWorld(int& worldObjectCount) {
 	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.2f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
 	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
-	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.2f, new MetalMaterial(vec3(0.6, 0.6, 0.2)));
+	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.8f, 0.5f, -1)), 0.15f, new MetalMaterial(vec3(1, 1, 1)));
 	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.2f, 0.5f, -1)), 0.2f, new MetalMaterial(vec3(0.8, 0.8, 0.8)));
-	sphere1 = sphere3;
+	sphere2 = sphere3;
+	delete sphere1;
+	sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.2f, new MetalMaterial(vec3(1, 1, 1)));
 
 	worldObjectCount = 4;
 	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
@@ -143,14 +148,13 @@ HitableList* getHitableWorld(int& worldObjectCount) {
 	worldObjectList[2] = sphere3;
 	worldObjectList[3] = sphere4;
 
-	HitableList* world = new HitableList(worldObjectList, 1);
+	HitableList* world = new HitableList(worldObjectList, 2);
 
 	return world;
 }
 
 int main() {
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
-
 
 	//以PPM格式记录
 	cout << "P3 \n" << RENDER_IMAGE_WIDTH << " " << RENDER_IMAGE_HEIGHT << "\n255\n";
@@ -188,6 +192,9 @@ int main() {
 				//获取当前像素的随机采样
 				float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
 				float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
+
+				texel_u = (((float)i) / (RENDER_IMAGE_WIDTH - 1));
+				texel_v = (((float)j) / (RENDER_IMAGE_HEIGHT - 1));
 
 				vec3 pixelUV = Screen::normalizedUVtoReal(vec3(texel_u, texel_v, -1));
 				ray cameraRayToPixel = camera.get_ray(pixelUV.x(), pixelUV.y());
