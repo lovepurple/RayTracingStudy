@@ -30,6 +30,7 @@ public:
 	inline vec3& operator/=(const vec3& v2);
 	inline vec3& operator*=(const float f);
 	inline vec3& operator/=(const float f);
+	inline bool operator==(const vec3& v2);
 
 
 	inline float length() const			//C++ 1. 函数后加const 作用是声明函数为只读函数，只有const 成员才能调用 2.此函数不能修改成员变量的值。
@@ -43,8 +44,6 @@ public:
 	}
 
 	inline void make_unit_vector();			//inline 在编译时，会自动展开，适合操作比较简单的函数。
-
-
 
 	float e[3];
 	static vec3 ZERO;
@@ -137,7 +136,6 @@ inline float distance(const vec3& v1, const vec3& v2) {
 }
 
 
-
 //实现定义的方法体
 inline vec3& vec3::operator +=(const vec3& v)
 {
@@ -195,6 +193,14 @@ inline vec3& vec3::operator /=(const float t)
 
 	return *this;
 }
+
+inline bool vec3::operator==(const vec3& v2)
+{
+	return e[0] == v2.e[0] &&
+		e[1] == v2.e[1] &&
+		e[2] == v2.e[2];
+}
+
 
 //normalize
 inline vec3 unit_vector(vec3 v)
