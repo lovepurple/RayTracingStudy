@@ -30,6 +30,7 @@ public:
 	vec3 sphere_center;
 	float sphere_radius;
 	Material* mat;
+
 private:
 	void ContructHitInfo(HitInfo& hitinfo, const ray& ray, float rayLength) const {
 		hitinfo.HitPoint = ray.point_at_parameter(rayLength);

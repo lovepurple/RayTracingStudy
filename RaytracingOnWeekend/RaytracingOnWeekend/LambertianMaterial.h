@@ -18,12 +18,9 @@ public:
 			Vec albedoCol = vec(1,1,1);
 			Material* mat_ptr = new LambertianMaterial(albedoCol);
 	 */
-	LambertianMaterial(const vec3& albedo) :m_albedo(albedo) {}
+	LambertianMaterial(const vec3& albedo) { this->m_albedo = albedo; }
 
 	// Inherited via Material
 	virtual bool scatter(const ray& incidentRay, const HitInfo& hitInfo, vec3& attenuation, ray& outRay) const override;
-
-	vec3 m_albedo;
-
 };
 

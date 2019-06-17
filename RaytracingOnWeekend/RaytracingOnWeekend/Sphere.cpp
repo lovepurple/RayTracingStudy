@@ -17,12 +17,26 @@ bool Sphere::Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) con
 		float rootA = (-b + sqrt(discriminant)) / (2.0f * a);
 		float rootB = (-b - sqrt(discriminant)) / (2.0f * a);
 
-		if ((rootA < t_max) && (rootA > t_min))
-			ContructHitInfo(hitInfo, ray, rootA);
-		else if (rootB<t_max && rootB >t_min)
-			ContructHitInfo(hitInfo, ray, rootB);
-		else
+		HitInfo hitableInfoA;
+		HitInfo hitableInfoB;
+
+		//排除超出范围的解
+		if (rootA > t_max || rootA < t_min)
+			rootA = FLT_MAX;
+
+		if (rootB > t_max || rootB < t_min)
+			rootB = FLT_MAX;
+
+		//todo:MLGB 这里两个根都可能是正解，但应该取就近的一个
+		//SB Bug 找了好几天
+		//点的方向要与光的方向一致,如果两个解都是正解，取距离近的
+		float closestDistance = std::fminf(rootA, rootB);
+
+		//无解
+		if (closestDistance == FLT_MAX)
 			return false;
+
+		ContructHitInfo(hitInfo, ray, closestDistance);
 
 		return true;
 	}

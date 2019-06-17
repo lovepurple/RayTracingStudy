@@ -10,6 +10,7 @@
 #include "Utility.h"
 #include "LambertianMaterial.h"
 #include "MetalMaterial.h"
+#include <typeinfo>
 
 #define cout fout
 #define MAX_TRACING_TIMES 10		//最大追踪次数
@@ -35,6 +36,43 @@ float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
 
 
 int m_reflectTimes = 0;
+
+vec3 get_skybox_color(const ray& cameraRay) {
+	vec3 normalized_direction = unit_vector(cameraRay.direction());
+	float backgroundLerpFactor = (normalized_direction.y() + 1.0f) * 0.5f;
+
+	return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);
+}
+
+vec3 debug_hitpoint_normal(const ray& tracingRay, Hitable* world) {
+	HitInfo hitInfo;
+	if (world->Hit(tracingRay, FLT_TRUE_MIN, FLT_MAX, hitInfo))
+		return toColor(hitInfo.HitPointNormal);
+
+	return get_skybox_color(tracingRay);
+}
+
+vec3 debug_reflect_dir(const ray& tracingRay, Hitable* world) {
+	HitInfo hitInfo;
+	if (world->Hit(tracingRay, FLT_TRUE_MIN, FLT_MAX, hitInfo))
+	{
+		vec3 reflectDir = reflect(tracingRay.direction(), hitInfo.HitPointNormal);
+		float dotValue = dot(reflectDir, hitInfo.HitPointNormal);
+		vec3 col = dotValue > 0 ? toColor(dotValue) : vec3::ZERO;
+		return col;
+	}
+
+	return get_skybox_color(tracingRay);
+}
+
+vec3 debug_hitpoint(const ray& tracingRay, Hitable* world) {
+	HitInfo hitInfo;
+	if (world->Hit(tracingRay, FLT_TRUE_MIN, FLT_MAX, hitInfo))
+		return toColor(hitInfo.HitPoint);
+
+	return get_skybox_color(tracingRay);
+}
+
 /**
  * world中存的是场景，hitable*实现是hitable_list
 	击中返回击中点法线
@@ -75,19 +113,18 @@ vec3 color(const ray& tracingRay, Hitable* world, int tracingTimes) {
 	HitInfo hitInfo;
 
 	if (world->Hit(tracingRay, 0.0001f, FLT_MAX, hitInfo)) {
-		ray	reflectRay;
+		ray	outRay;
 		vec3 attenuation;
-		hitInfo.mat_ptr->scatter(tracingRay, hitInfo, attenuation, reflectRay);
+		bool isContinueTracing = hitInfo.mat_ptr->scatter(tracingRay, hitInfo, attenuation, outRay);
 
 		//光线根据击中材质的不同进一步散射
-		/*if (tracingTimes < MAX_TRACING_TIMES && hitInfo.mat_ptr->scatter(tracingRay, hitInfo, attenuation, reflectRay)) {
-			return attenuation * color(reflectRay, world, ++tracingTimes);
-		}*/
-		return toColor(reflectRay.direction());
+		if (tracingTimes < MAX_TRACING_TIMES && isContinueTracing)
+		{
+			return attenuation * color(outRay, world, ++tracingTimes);
+		}
+		else
+			return vec3::ZERO;
 
-
-		//else
-		//	return vec3::ONE;
 	}
 	else
 	{
@@ -101,12 +138,11 @@ vec3 color(const ray& tracingRay, Hitable* world, int tracingTimes) {
 }
 
 vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
-	vec3 sphereCenter = Screen::normalizedUVtoReal(vec3(0.5, 0.5, -1));
-
+	vec3 sphereCenter = Screen::normalizedUVtoReal(vec3(0.2, 0.2, -1));
 	//todo:使用半径为0.5时会超出区域，原因可能是球有z的方向，在屏幕上投影问题
 
 	//计算相交点
-	float t = hit_sphere(sphereCenter, 0.4, r);
+	float t = hit_sphere(sphereCenter, 0.1, r);
 	if (t > 0.0f)
 	{
 		vec3 hitPointOnSphere = r.point_at_parameter(t);
@@ -133,20 +169,19 @@ vec3 uvToPixel(const vec3& uv) {
 }
 
 HitableList* getHitableWorld(int& worldObjectCount) {
-	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.2f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
-	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
-	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.8f, 0.5f, -1)), 0.15f, new MetalMaterial(vec3(1, 1, 1)));
-	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.2f, 0.5f, -1)), 0.2f, new MetalMaterial(vec3(0.8, 0.8, 0.8)));
-	sphere2 = sphere3;
-	delete sphere1;
-	sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.2f, new MetalMaterial(vec3(1, 1, 1)));
+	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.15f, new MetalMaterial(vec3(1, 1, 0)));
+	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.8f, 0.5f, -0.8)), 0.15f, new MetalMaterial(vec3(0, 1, 1)));
+	//Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.1f, 0.5f, -1)), 0.15f, new LambertianMaterial(vec3(0.8, 0.3, 0.8)));
+
+	//Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new MetalMaterial(vec3(0.8, 0, 0)));
+
 
 	worldObjectCount = 4;
 	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
 	worldObjectList[0] = sphere1;
 	worldObjectList[1] = sphere2;
-	worldObjectList[2] = sphere3;
-	worldObjectList[3] = sphere4;
+	//worldObjectList[2] = sphere3;
+	//worldObjectList[3] = sphere4;
 
 	HitableList* world = new HitableList(worldObjectList, 2);
 
@@ -159,7 +194,6 @@ int main() {
 	//以PPM格式记录
 	cout << "P3 \n" << RENDER_IMAGE_WIDTH << " " << RENDER_IMAGE_HEIGHT << "\n255\n";
 
-
 	/*
 		关于uv*screenParam的理解：
 			1. 整个屏幕的uv范围是[0,1]正方形 ，但实现屏幕分辨率大多数情况下都是长宽不相等
@@ -168,14 +202,6 @@ int main() {
 
 	Camera camera = Camera();
 
-	//构建多个物体
-	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.4f);
-	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f);	//特别大的球
-	Hitable* worldObjectList[2];
-	worldObjectList[0] = sphere1;
-	worldObjectList[1] = sphere2;
-
-	//HitableList* world = new HitableList(worldObjectList, 2);
 	int worldObjectCount = 0;
 	HitableList* world = getHitableWorld(worldObjectCount);
 
@@ -199,7 +225,7 @@ int main() {
 				vec3 pixelUV = Screen::normalizedUVtoReal(vec3(texel_u, texel_v, -1));
 				ray cameraRayToPixel = camera.get_ray(pixelUV.x(), pixelUV.y());
 
-				pixelColor += color(cameraRayToPixel, world, 0);
+				pixelColor = color(cameraRayToPixel, world, 0);
 			}
 			pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
 
