@@ -237,6 +237,26 @@ inline  vec3 lerp(const vec3& vec1, const vec3& vec2, float factor) {
 	return (1 - factor) * vec1 + vec2 * factor;
 }
 
+/**
+ * 求折射向量
+
+	n1_over_n2 为 入射介质常量 / 介质内部常量
+ */
+inline bool refract(const vec3& inputDir, const vec3& normalDir, float n1_over_n2, vec3& refractDir) {
+	vec3 normalizeInputDir = unit_vector(inputDir);
+	float IDotN = dot(normalizeInputDir, normalDir);
+	float discriminant = 1.0 - n1_over_n2 * (1.0 - IDotN * IDotN);
+
+	if (discriminant > 0)
+	{
+		refractDir = n1_over_n2 * (normalDir - normalDir * IDotN) - normalDir * sqrt(discriminant);
+		refractDir = unit_vector(refractDir);
+		return true;
+	}
+
+	return false;		//全反射，如果n1 n2相等 直接全反射
+}
+
 /*
 std::ostream& operator<<(std::ostream& out, vec3& v) {
 	std::cout << v.e[0] << "," << v.e[1] << "," << v.e[2] << std::endl;
