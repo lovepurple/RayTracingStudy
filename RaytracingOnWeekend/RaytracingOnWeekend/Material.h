@@ -1,6 +1,7 @@
 #pragma once
 #include "ray.h"
 #include "Hitable.h"
+#include "Utility.h"
 /**
  * 材质类，对不同的材质进行不同的着色
  */
