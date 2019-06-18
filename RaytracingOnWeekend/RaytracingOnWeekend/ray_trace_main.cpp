@@ -123,18 +123,10 @@ vec3 color(const ray& tracingRay, Hitable* world, int tracingTimes) {
 			return attenuation * color(outRay, world, ++tracingTimes);
 		}
 		else
-			return vec3::ZERO;
-
+			return vec3::ZERO;			//一个像素会进行多次追踪，有可能该点就是黑色的
 	}
 	else
-	{
-		//相当于Skybox
-		vec3 normalized_direction = unit_vector(tracingRay.direction());
-		float backgroundLerpFactor = (normalized_direction.y() + 1.0f) * 0.5f;
-
-		return (1.0f - backgroundLerpFactor) * vec3(1.0, 1.0, 1.0) + backgroundLerpFactor * vec3(0.5, 0.7, 1);
-	}
-
+		return get_skybox_color(tracingRay);
 }
 
 vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
@@ -168,22 +160,22 @@ vec3 uvToPixel(const vec3& uv) {
 	return vec3(uv.x() * RENDER_IMAGE_WIDTH, uv.y() * RENDER_IMAGE_HEIGHT, 0);
 }
 
-HitableList* getHitableWorld(int& worldObjectCount) {
-	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.15f, new MetalMaterial(vec3(1, 1, 0)));
-	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.8f, 0.5f, -0.8)), 0.15f, new MetalMaterial(vec3(0, 1, 1)));
-	//Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.1f, 0.5f, -1)), 0.15f, new LambertianMaterial(vec3(0.8, 0.3, 0.8)));
+HitableList* getHitableWorld() {
+	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.75f, 0.5f, -1)), 0.125f, new MetalMaterial(vec3(0.8, 0.6, 0.2)));
+	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.5f, -1)), 0.125f, new MetalMaterial(vec3(0.8, 0.8, 0.8)));
 
-	//Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new MetalMaterial(vec3(0.8, 0, 0)));
+	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.125f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
+	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
 
 
-	worldObjectCount = 4;
+	int worldObjectCount = 4;
 	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
 	worldObjectList[0] = sphere1;
 	worldObjectList[1] = sphere2;
-	//worldObjectList[2] = sphere3;
-	//worldObjectList[3] = sphere4;
+	worldObjectList[2] = sphere3;
+	worldObjectList[3] = sphere4;
 
-	HitableList* world = new HitableList(worldObjectList, 2);
+	HitableList* world = new HitableList(worldObjectList, 4);
 
 	return world;
 }
@@ -202,8 +194,7 @@ int main() {
 
 	Camera camera = Camera();
 
-	int worldObjectCount = 0;
-	HitableList* world = getHitableWorld(worldObjectCount);
+	HitableList* world = getHitableWorld();
 
 
 	//Pixel Coordiate
@@ -219,13 +210,10 @@ int main() {
 				float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
 				float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
-				texel_u = (((float)i) / (RENDER_IMAGE_WIDTH - 1));
-				texel_v = (((float)j) / (RENDER_IMAGE_HEIGHT - 1));
-
 				vec3 pixelUV = Screen::normalizedUVtoReal(vec3(texel_u, texel_v, -1));
 				ray cameraRayToPixel = camera.get_ray(pixelUV.x(), pixelUV.y());
 
-				pixelColor = color(cameraRayToPixel, world, 0);
+				pixelColor += color(cameraRayToPixel, world, 0);
 			}
 			pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
 
