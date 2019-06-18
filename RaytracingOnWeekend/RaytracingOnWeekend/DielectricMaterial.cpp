@@ -14,7 +14,7 @@ bool DielectricMaterial::scatter(const ray& incidentRay, const HitInfo& hitInfo,
 		在空气中 正常在介质表面 IDotN <0 （入射光方向指向表面），但有些引擎中（Unity的LightDir ）方向默认是反过来的，需要再一次确定入射光的方向
 	*/
 
-	attenuation = vec3(1.0, 1.0, 0);
+	attenuation = vec3(1.0, 1.0, 1.0);		//书中使用的是vec(1,1,0) 方便调试 要不看不到分界
 
 	//只是计算正负，减少一次Normalize操作，优化计算  
 	float IDotN = dot(incidentRay.direction(), hitInfo.HitPointNormal);
