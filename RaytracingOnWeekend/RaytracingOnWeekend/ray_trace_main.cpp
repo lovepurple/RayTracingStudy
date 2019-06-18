@@ -164,7 +164,7 @@ vec3 uvToPixel(const vec3& uv) {
 HitableList* getHitableWorld() {
 	//º”»Î»≈∂Ø
 	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.75f, 0.5f, -1)), 0.125f, new MetalMaterial(vec3(0.8, 0.6, 0.2), 0.1));
-	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.7f, -1)), 0.125f, new DielectricMaterial(1.5f));
+	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.5f, -1)), 0.125f, new DielectricMaterial(1.5f));
 
 	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.125f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
 	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));

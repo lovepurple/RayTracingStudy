@@ -241,6 +241,8 @@ inline  vec3 lerp(const vec3& vec1, const vec3& vec2, float factor) {
  * 求折射向量
 
 	n1_over_n2 为 入射介质常量 / 介质内部常量
+
+	坑爹，书中折射公式给的有问题，一会用的是Normalized 一会用的原来的
  */
 inline bool refract(const vec3& inputDir, const vec3& normalDir, float n1_over_n2, vec3& refractDir) {
 	vec3 normalizeInputDir = unit_vector(inputDir);
@@ -249,7 +251,7 @@ inline bool refract(const vec3& inputDir, const vec3& normalDir, float n1_over_n
 
 	if (discriminant > 0)
 	{
-		refractDir = n1_over_n2 * (normalDir - normalDir * IDotN) - normalDir * sqrt(discriminant);
+		refractDir = n1_over_n2 * (normalizeInputDir - normalDir * IDotN) - normalDir * sqrt(discriminant);
 		refractDir = unit_vector(refractDir);
 		return true;
 	}
