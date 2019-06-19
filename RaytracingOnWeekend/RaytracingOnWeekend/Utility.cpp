@@ -23,3 +23,13 @@ float Utility::fresnel(float cosi, float cost, float etai_over_etat)
 {
 	return fresnel(cosi, cost, etai_over_etat, 1);
 }
+
+float Utility::schlick(float etai_over_etat, float cosine)
+{
+	//引擎中可以直接以R0做为参数
+	float sqrt_r0 = (etai_over_etat - 1.0) / (etai_over_etat + 1);
+	float r0 = sqrt_r0 * sqrt_r0;
+
+	//R0 +(1-R0)(1-cos θ) ^5
+	return r0 + (1.0 + r0) * pow((1 - cosine), 5);
+}

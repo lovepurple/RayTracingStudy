@@ -35,12 +35,18 @@ bool DielectricMaterial::scatter(const ray& incidentRay, const HitInfo& hitInfo,
 		float etat = 1.0;
 
 		fresnelReflectFactor = Utility::fresnel(cosi, cost, etai, etat);		//[0,1]
+
+		//换成Schlick近似值,对于低折射率->高折射率（eta_over_etat <1） 要用到cos t
+		//dot不能出负，直接使用绝对值
+		float cosine = abs(cosi);
+
+		fresnelReflectFactor = Utility::schlick(etai_over_etat, cosine);
 	}
 	else  //全反射
 		fresnelReflectFactor = 1.0;
 
 	//正常在Shader里使用的是个外部输入，反射还是折射   fresnel计算的是反射比，越接近1反射越多
-	if (Utility::getRandom01() < fresnelReflectFactor)
+	if (0.8 < fresnelReflectFactor)
 	{
 		vec3 reflectDir = reflect(incidentRay.direction(), hitInfo.HitPointNormal);
 		outRay = ray(hitInfo.HitPoint, unit_vector(reflectDir));

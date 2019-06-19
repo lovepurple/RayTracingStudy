@@ -22,6 +22,11 @@ public:
 
 	static float fresnel(float cosi, float cost, float etai_over_etat);
 
+	/*
+		Schlick 对于Fresnel的近似  cosine是入射光与法线的dot
+	*/
+	static float schlick(float etai_over_etat, float cosine);
+
 	
 	inline static float getRandom01() { return DRand48::drand48(); }
 };

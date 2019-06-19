@@ -167,16 +167,18 @@ HitableList* getHitableWorld() {
 
 	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.125f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
 	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
+	Sphere* sphere5 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.2f, -1)), 0.125f, new DielectricMaterial(0.8f));
 
 
-	int worldObjectCount = 4;
+	int worldObjectCount = 5;
 	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
 	worldObjectList[0] = sphere1;
 	worldObjectList[1] = sphere2;
 	worldObjectList[2] = sphere3;
 	worldObjectList[3] = sphere4;
+	worldObjectList[4] = sphere5;
 
-	HitableList* world = new HitableList(worldObjectList, 4);
+	HitableList* world = new HitableList(worldObjectList, 5);
 
 	return world;
 }
