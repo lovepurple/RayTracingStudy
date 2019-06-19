@@ -6,7 +6,6 @@
 #include "float.h"
 #include "Screen.h"
 #include "Camera.h"
-#include "DRand48.h"
 #include "Utility.h"
 #include "LambertianMaterial.h"
 #include "MetalMaterial.h"
@@ -14,7 +13,7 @@
 #include <typeinfo>
 
 #define cout fout
-#define MAX_TRACING_TIMES 10		//最大追踪次数
+#define MAX_TRACING_TIMES 100		//最大追踪次数
 
 
 float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {

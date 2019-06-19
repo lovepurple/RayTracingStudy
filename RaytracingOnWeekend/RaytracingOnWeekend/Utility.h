@@ -13,5 +13,16 @@ public:
 	*/
 	static vec3 random_direction_in_unit_sphere();
 
+	/**
+	 * 电介质的Fresnel函数
+
+		PS：η  eta
+	 */
+	static float fresnel(float cosi, float cost, float etai, float etat);
+
+	static float fresnel(float cosi, float cost, float etai_over_etat);
+
+	
+	inline static float getRandom01() { return DRand48::drand48(); }
 };
 
