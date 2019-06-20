@@ -33,3 +33,13 @@ float Utility::schlick(float etai_over_etat, float cosine)
 	//R0 +(1-R0)(1-cos ¦È) ^5
 	return r0 + (1.0 + r0) * pow((1 - cosine), 5);
 }
+
+float Utility::deg2rad(float degrees)
+{
+	return (degrees / 180.0f) * M_PI;
+}
+
+float Utility::rad2deg(float rad)
+{
+	return  (rad / M_PI) * 180.f;
+}

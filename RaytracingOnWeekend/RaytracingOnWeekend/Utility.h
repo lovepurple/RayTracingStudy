@@ -1,6 +1,8 @@
 #pragma once
+#define  _USE_MATH_DEFINES			//C++恶心的地方，各种宏编译，使用M_PI需要在 #include math.h 之前#define 一次这个宏
 #include "Vec3.h"
 #include "DRand48.h"
+
 /**
  * 各种帮助类
  */
@@ -27,7 +29,16 @@ public:
 	*/
 	static float schlick(float etai_over_etat, float cosine);
 
-	
+	/*
+		角度转弧度
+	*/
+	static float deg2rad(float degrees);
+
+	/*
+		弧度转角度
+	*/
+	static float rad2deg(float rad);
+
 	inline static float getRandom01() { return DRand48::drand48(); }
 };
 
