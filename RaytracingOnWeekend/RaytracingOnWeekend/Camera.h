@@ -18,7 +18,9 @@ public:
 	Camera(vec3 cameraPosition, vec3 cameraForwardDir, vec3 cameraUpDir, float fov, float aspect);
 
 
-	ray get_ray(float u, float v);
+	ray get_ndc_ray(float u, float v);
+
+	ray get_camera_ray(float x, float y);
 
 	vec3 camera_position;
 

@@ -156,10 +156,6 @@ vec3 pixelToNormalizeUV(int pixelX, int pixelY) {
 }
 
 
-vec3 uvToPixel(const vec3& uv) {
-	return vec3(uv.x() * RENDER_IMAGE_WIDTH, uv.y() * RENDER_IMAGE_HEIGHT, 0);
-}
-
 HitableList* getHitableWorld() {
 	//加入扰动
 	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.75f, 0.5f, -1)), 0.125f, new MetalMaterial(vec3(0.8, 0.6, 0.2), 0.1));
@@ -169,6 +165,7 @@ HitableList* getHitableWorld() {
 	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
 	Sphere* sphere5 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.2f, -1)), 0.125f, new DielectricMaterial(0.8f));
 
+	sphere1 = new Sphere(vec3(0, 0, -1), 0.5f, new LambertianMaterial(vec3(0.8, 0.6, 0.2)));
 
 	int worldObjectCount = 5;
 	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
@@ -178,7 +175,7 @@ HitableList* getHitableWorld() {
 	worldObjectList[3] = sphere4;
 	worldObjectList[4] = sphere5;
 
-	HitableList* world = new HitableList(worldObjectList, 5);
+	HitableList* world = new HitableList(worldObjectList, 1);
 
 	return world;
 }
@@ -195,7 +192,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	Camera camera = Camera();
+	Camera camera = Camera(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0, 1, 0), 90.0, SCREEN_PARAM);
 
 	HitableList* world = getHitableWorld();
 
@@ -213,8 +210,7 @@ int main() {
 				float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
 				float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
-				vec3 pixelUV = Screen::normalizedUVtoReal(vec3(texel_u, texel_v, -1));
-				ray cameraRayToPixel = camera.get_ray(pixelUV.x(), pixelUV.y());
+				ray cameraRayToPixel = camera.get_camera_ray(texel_u, texel_v);
 
 				pixelColor += color(cameraRayToPixel, world, 0);
 			}
