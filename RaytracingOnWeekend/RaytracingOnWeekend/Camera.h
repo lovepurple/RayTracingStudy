@@ -35,6 +35,9 @@ private:
 	vec3 m_camera_up_dir;			//Y轴
 	vec3 m_camera_right_dir;	    //X轴， 使用右手坐标系
 
+	float width;					//摄像机视野裁剪面宽
+	float height;
+
 	vec3 u;
 	vec3 v;
 };

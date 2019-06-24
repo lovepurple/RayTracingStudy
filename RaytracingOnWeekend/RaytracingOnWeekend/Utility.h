@@ -40,5 +40,10 @@ public:
 	static float rad2deg(float rad);
 
 	inline static float getRandom01() { return DRand48::drand48(); }
+
+	/*
+		Çø¼äÓ³Éä
+	*/
+	static float remap(float currentVal, float inputMin, float inputMax, float outMin, float outMax);
 };
 

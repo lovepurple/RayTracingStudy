@@ -43,3 +43,9 @@ float Utility::rad2deg(float rad)
 {
 	return  (rad / M_PI) * 180.f;
 }
+
+float Utility::remap(float currentVal, float inputMin, float inputMax, float outMin, float outMax)
+{
+	float ratio = (outMax - outMin) / (inputMax - inputMin);
+	return outMin + ratio * (currentVal - inputMin);
+}

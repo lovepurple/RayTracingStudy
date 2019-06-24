@@ -165,8 +165,6 @@ HitableList* getHitableWorld() {
 	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
 	Sphere* sphere5 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.2f, -1)), 0.125f, new DielectricMaterial(0.8f));
 
-	sphere1 = new Sphere(vec3(0, 0, -1), 0.5f, new LambertianMaterial(vec3(0.8, 0.6, 0.2)));
-
 	int worldObjectCount = 5;
 	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
 	worldObjectList[0] = sphere1;
@@ -175,12 +173,13 @@ HitableList* getHitableWorld() {
 	worldObjectList[3] = sphere4;
 	worldObjectList[4] = sphere5;
 
-	HitableList* world = new HitableList(worldObjectList, 1);
+	HitableList* world = new HitableList(worldObjectList, worldObjectCount);
 
 	return world;
 }
 
 int main() {
+
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
 
 	//以PPM格式记录
@@ -193,6 +192,7 @@ int main() {
 	*/
 
 	Camera camera = Camera(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0, 1, 0), 90.0, SCREEN_PARAM);
+
 
 	HitableList* world = getHitableWorld();
 

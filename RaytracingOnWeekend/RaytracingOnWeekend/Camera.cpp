@@ -12,6 +12,9 @@ Camera::Camera(vec3 cameraPosition, vec3 cameraForwardDir, vec3 cameraUpDir, flo
 	float halfHeight = tan(Utility::deg2rad(fov) * 0.5f);
 	float halfWidth = halfHeight * aspect;
 
+	this->width = 2.0 * halfWidth;
+	this->height = 2.0 * halfHeight;
+
 	this->u = this->m_camera_right_dir;
 	this->v = this->m_camera_up_dir;
 
@@ -19,9 +22,11 @@ Camera::Camera(vec3 cameraPosition, vec3 cameraForwardDir, vec3 cameraUpDir, flo
 	this->m_lower_left_corner = vec3(-halfWidth, -halfHeight, -1);
 }
 
-ray Camera::get_camera_ray(float x, float y)
+
+ray Camera::get_camera_ray(float u01, float v01)
 {
-	vec3 rayDirection = vec3(this->m_lower_left_corner + u * x + v * y) - this->m_camera_world_position;
+	//ÆÁÄ»×óÏÂÊÇ0£¬0 
+	vec3 rayDirection = vec3(this->m_lower_left_corner + this->u * u01 * this->width + this->v * v01 * this->height) - this->m_camera_world_position;
 
 	return ray(this->m_camera_world_position, unit_vector(rayDirection));
 }
