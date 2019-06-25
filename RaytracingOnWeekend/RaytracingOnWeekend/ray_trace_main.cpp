@@ -11,9 +11,10 @@
 #include "MetalMaterial.h"
 #include "DielectricMaterial.h"
 #include <typeinfo>
+#include <time.h>
 
 #define cout fout
-#define MAX_TRACING_TIMES 100		//最大追踪次数
+#define MAX_TRACING_TIMES 10		//最大追踪次数
 
 
 float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
@@ -158,8 +159,8 @@ vec3 pixelToNormalizeUV(int pixelX, int pixelY) {
 
 HitableList* getHitableWorld() {
 	//加入扰动
-	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0.75f, 0.5f, -1)), 0.125f, new MetalMaterial(vec3(0.8, 0.6, 0.2), 0.1));
-	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.5f, -1)), 0.125f, new DielectricMaterial(1.5f));
+	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0, 0, -1)), 0.5f, new MetalMaterial(vec3(0.8, 0.6, 0.2), 0.1));
+	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(-1, 0, -1)), 0.5f, new DielectricMaterial(1.5f));
 
 	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.125f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
 	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
@@ -178,6 +179,38 @@ HitableList* getHitableWorld() {
 	return world;
 }
 
+HitableList* getRandomWorld() {
+	int worldObjectCount = 500;
+
+	Hitable** worldObjectList = new Hitable * [worldObjectCount + 1];
+	worldObjectList[0] = new Sphere(vec3(0, -1000, 1), 1000, new LambertianMaterial(vec3(0.5, 0.5, 0.5)));
+	int i = 1;
+	for (int a = -8; a < 8; ++a)
+	{
+		for (int b = -8; b < 8; ++b)
+		{
+			float radMat = Utility::getRandom01();
+			vec3 sphereCenter(a + 0.9f * Utility::getRandom01(), 0.2, b + 0.9f * Utility::getRandom01());
+			if (radMat < 0.33)
+				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, new LambertianMaterial(vec3(Utility::getRandom01() * Utility::getRandom01(), Utility::getRandom01() * Utility::getRandom01(), Utility::getRandom01() * Utility::getRandom01())));
+			else if (radMat < 0.66)
+				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, new MetalMaterial(vec3(
+					0.5 * (1 + Utility::getRandom01()),
+					0.5 * (1 + Utility::getRandom01()),
+					0.5 * (1 + Utility::getRandom01())), 0.5 * Utility::getRandom01()));
+			else
+				worldObjectList[i++] = new Sphere(sphereCenter, 0.2, new DielectricMaterial(1.5));
+		}
+	}
+
+	worldObjectList[i++] = new Sphere(vec3(1.5, 1.2, -2.5), 1.2, new DielectricMaterial(1.5));
+	worldObjectList[i++] = new Sphere(vec3(-1, 1.5, -3), 1.5, new LambertianMaterial(vec3(0.4, 0.2, 0.1)));
+	worldObjectList[i++] = new Sphere(vec3(3.5, 1, -2), 1.0, new MetalMaterial(vec3(0.7, 0.6, 0.5), 0));
+
+
+	return new HitableList(worldObjectList, i);
+}
+
 int main() {
 
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
@@ -191,43 +224,51 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	Camera camera = Camera(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0, 1, 0), 90.0, SCREEN_PARAM);
+	Camera camera = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0);
+	//camera = Camera(vec3(0, 3, 0), vec3(0, 0, -1), vec3::UP, 90, SCREEN_PARAM, 2.0f, 1);
 
 
-	HitableList* world = getHitableWorld();
+	HitableList* world = getRandomWorld();
 
-
-	//Pixel Coordiate
-	for (int j = RENDER_IMAGE_HEIGHT - 1; j >= 0; j--)
+	try
 	{
-		for (int i = 0; i < RENDER_IMAGE_WIDTH; ++i)
+		//Pixel Coordiate
+		for (int j = RENDER_IMAGE_HEIGHT - 1; j >= 0; j--)
 		{
-			//对每个像素内部再随机采样，差值出颜色，抗锯齿
-			vec3 pixelColor = vec3::ZERO;
-			for (int k = 0; k < ANTI_ANTIALIASING_TIMES; ++k)
+			for (int i = 0; i < RENDER_IMAGE_WIDTH; ++i)
 			{
-				//获取当前像素的随机采样
-				float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
-				float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
+				//对每个像素内部再随机采样，差值出颜色，抗锯齿
+				vec3 pixelColor = vec3::ZERO;
+				for (int k = 0; k < ANTI_ANTIALIASING_TIMES; ++k)
+				{
+					//获取当前像素的随机采样
+					float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
+					float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
-				ray cameraRayToPixel = camera.get_camera_ray(texel_u, texel_v);
+					ray cameraRayToPixel = camera.get_camera_ray(texel_u, texel_v);
 
-				pixelColor += color(cameraRayToPixel, world, 0);
+					pixelColor += color(cameraRayToPixel, world, 0);
+				}
+				pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
+
+				//gamma纠正， color ^ 1/gamma,提亮暗部
+				//pixelColor = toGammaColor(pixelColor, 0.5f);
+
+				int ir = int(255.99 * pixelColor[0]);
+				int ig = int(255.99 * pixelColor[1]);
+				int ib = int(255.99 * pixelColor[2]);
+
+				cout << ir << " " << ig << " " << ib << " ";
+
 			}
-			pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
-
-			//gamma纠正， color ^ 1/gamma,提亮暗部
-			//pixelColor = toGammaColor(pixelColor, 0.5f);
-
-			int ir = int(255.99 * pixelColor[0]);
-			int ig = int(255.99 * pixelColor[1]);
-			int ib = int(255.99 * pixelColor[2]);
-
-			cout << ir << " " << ig << " " << ib << " ";
-
+			cout << "\n";
 		}
-		cout << "\n";
 	}
+	catch (const std::exception&)
+	{
+
+	}
+
 
 	return 0;
 }

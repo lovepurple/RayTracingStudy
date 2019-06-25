@@ -1,6 +1,6 @@
 #include "DRand48.h"
 
-long long DRand48::seed = 1;
+long long DRand48::seed = 123456;
 
 double DRand48::drand48()
 {

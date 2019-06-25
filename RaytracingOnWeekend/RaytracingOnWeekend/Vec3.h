@@ -44,10 +44,13 @@ public:
 	}
 
 	inline void make_unit_vector();			//inline 在编译时，会自动展开，适合操作比较简单的函数。
+	vec3 normalize() const;
 
 	float e[3];
 	static vec3 ZERO;
 	static vec3 ONE;
+	static vec3 UP;
+	static vec3 DOWN;
 };
 
 
@@ -71,6 +74,7 @@ inline void vec3::make_unit_vector()
 	e[1] *= k;
 	e[2] *= k;
 }
+
 
 inline vec3 operator+(const vec3& v1, const vec3& v2)
 {
