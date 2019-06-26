@@ -251,8 +251,9 @@ int main() {
 				}
 				pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
 
-				//gamma纠正， color ^ 1/gamma,提亮暗部
-				//pixelColor = toGammaColor(pixelColor, 0.5f);
+				//gamma纠正， color ^ 1/gamma,提亮暗部（多次追踪后，颜色一次次衰减太暗）
+				//pixelColor = toGammaColor(pixelColor, 0.95f);
+				pixelColor *= 1.5f;
 
 				int ir = int(255.99 * pixelColor[0]);
 				int ig = int(255.99 * pixelColor[1]);
