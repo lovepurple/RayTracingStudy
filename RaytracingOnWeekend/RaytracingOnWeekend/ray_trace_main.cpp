@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "Sphere.h"
+#include "Moving_Sphere.h"
 #include "HitableList.h"
 #include "float.h"
 #include "Screen.h"
@@ -15,6 +16,7 @@
 
 #define cout fout
 #define MAX_TRACING_TIMES 10		//最大追踪次数
+#define WORLD_WIDGET_COUNT 5
 
 
 float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
@@ -185,15 +187,18 @@ HitableList* getRandomWorld() {
 	Hitable** worldObjectList = new Hitable * [worldObjectCount + 1];
 	worldObjectList[0] = new Sphere(vec3(0, -1000, 1), 1000, new LambertianMaterial(vec3(0.5, 0.5, 0.5)));
 	int i = 1;
-	for (int a = -8; a < 8; ++a)
+	for (int a = -WORLD_WIDGET_COUNT; a < WORLD_WIDGET_COUNT; ++a)
 	{
-		for (int b = -8; b < 8; ++b)
+		for (int b = -WORLD_WIDGET_COUNT; b < WORLD_WIDGET_COUNT; ++b)
 		{
 			float radMat = Utility::getRandom01();
 			vec3 sphereCenter(a + 0.9f * Utility::getRandom01(), 0.2, b + 0.9f * Utility::getRandom01());
-			if (radMat < 0.33)
-				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, new LambertianMaterial(vec3(Utility::getRandom01() * Utility::getRandom01(), Utility::getRandom01() * Utility::getRandom01(), Utility::getRandom01() * Utility::getRandom01())));
-			else if (radMat < 0.66)
+
+			if (radMat < 0.25)
+				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, LambertianMaterial::getRandomAlbedoLambertianMat());
+			else if (radMat < 0.5)	//Y轴上移动
+				worldObjectList[i++] = new Moving_Sphere(sphereCenter, sphereCenter + vec3(0, DRand48::drand48(), 0), 0.2f, 0.0, 1.0, LambertianMaterial::getRandomAlbedoLambertianMat());
+			else if (radMat < 0.75)
 				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, new MetalMaterial(vec3(
 					0.5 * (1 + Utility::getRandom01()),
 					0.5 * (1 + Utility::getRandom01()),
@@ -224,8 +229,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	Camera camera = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0);
-	//camera = Camera(vec3(0, 3, 0), vec3(0, 0, -1), vec3::UP, 90, SCREEN_PARAM, 2.0f, 1);
+	Camera camera = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0, 0.0, 1.0);		// 快门时间[0,1]
 
 
 	HitableList* world = getRandomWorld();

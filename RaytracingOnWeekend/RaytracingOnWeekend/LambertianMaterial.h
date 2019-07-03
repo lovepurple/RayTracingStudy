@@ -22,5 +22,8 @@ public:
 
 	// Inherited via Material
 	virtual bool scatter(const ray& incidentRay, const HitInfo& hitInfo, vec3& attenuation, ray& outRay) const override;
+
+	//@brief:获取一个随机颜色的漫反射材质
+	static LambertianMaterial* getRandomAlbedoLambertianMat();
 };
 

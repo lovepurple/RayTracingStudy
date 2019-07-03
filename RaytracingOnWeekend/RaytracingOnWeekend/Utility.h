@@ -42,6 +42,11 @@ public:
 	inline static float getRandom01() { return DRand48::drand48(); }
 
 	/*
+		lerp
+	*/
+	inline static float lerp(float a, float b, float lerpFactor01) { return a + (b - a) * lerpFactor01; }
+
+	/*
 		Çø¼äÓ³Éä
 	*/
 	static float remap(float currentVal, float inputMin, float inputMax, float outMin, float outMax);

@@ -133,6 +133,7 @@
     <ClInclude Include="LambertianMaterial.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MetalMaterial.h" />
+    <ClInclude Include="Moving_Sphere.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Sphere.h" />
@@ -148,6 +149,7 @@
     <ClCompile Include="LambertianMaterial.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MetalMaterial.cpp" />
+    <ClCompile Include="Moving_Sphere.cpp" />
     <ClCompile Include="ray.cpp" />
     <ClCompile Include="ray_trace_main.cpp" />
     <ClCompile Include="Screen.cpp" />
