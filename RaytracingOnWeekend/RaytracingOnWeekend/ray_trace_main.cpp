@@ -218,6 +218,8 @@ HitableList* getRandomWorld() {
 
 int main() {
 
+	int sizeOf = sizeof(int*);
+	return 0;
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
 
 	//以PPM格式记录

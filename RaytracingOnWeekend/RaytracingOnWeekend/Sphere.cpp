@@ -41,3 +41,17 @@ bool Sphere::Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) con
 		return true;
 	}
 }
+
+AABB* Sphere::getHitable_AABB(float time0, float time1) /*const*/ //有const 不能修改成员变量
+{
+	if (m_hitableObjectAABB == nullptr)
+	{
+		//非移动物体的time没作用
+		vec3 sphereAABBMin = sphere_center - vec3(sphere_radius, sphere_radius, sphere_radius);
+		vec3 sphereAABBMax = sphere_center + vec3(sphere_radius, sphere_radius, sphere_radius);
+
+		this->m_hitableObjectAABB = new AABB(sphereAABBMin, sphereAABBMax);
+	}
+
+	return this->m_hitableObjectAABB;
+}

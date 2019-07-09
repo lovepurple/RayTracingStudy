@@ -1,5 +1,6 @@
 #pragma once
 #include "ray.h"
+#include "AABB.h"
 
 /**
  * 理解，由于Material.h中需要引用Hitable.h 而 hitable.h又需要include Material.h 造成了循环include
@@ -25,5 +26,11 @@ class Hitable
 	//C++ 纯虚函数（抽象函数）,函数结束是=0 ，子类必须实现
 public:
 	virtual bool Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) const = 0;
+
+	//获取物体的AABB time0,time1表示可移动的物体的时间计算
+	virtual AABB* getHitable_AABB(float time0, float time1) { return m_hitableObjectAABB; };
+
+protected:
+	AABB* m_hitableObjectAABB;
 };
 

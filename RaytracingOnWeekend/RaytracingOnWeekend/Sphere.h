@@ -27,6 +27,9 @@ public:
 	 */
 	virtual bool Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) const override;
 
+	// Inherited via Hitable
+	virtual AABB* getHitable_AABB(float time0, float time1)  override;
+
 	vec3 sphere_center;
 	float sphere_radius;
 	Material* mat;
@@ -38,5 +41,7 @@ private:
 		hitinfo.HitPointNormal = unit_vector(hitinfo.HitPoint - sphere_center);
 		hitinfo.mat_ptr = mat;		//»÷ÖÐ¼ÇÂ¼²ÄÖÊ
 	}
+
+
 };
 
