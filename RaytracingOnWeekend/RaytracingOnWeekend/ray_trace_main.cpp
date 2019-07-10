@@ -184,6 +184,16 @@ HitableList* getHitableWorld() {
 	return world;
 }
 
+HitableList* getTwoSphereWorld() {
+	Texture* checkerTexture = new Checker_Texture(new SolidColorTexture(vec3(0.2, 0.3, 0.1)), new SolidColorTexture(vec3(0.9, 0.9, 0.9)));
+
+	Hitable** hitableList = new Hitable * [2];
+	hitableList[0] = new Sphere(vec3(0, -10, 0), 10, new LambertianWithTextureMaterial(checkerTexture));
+	hitableList[1] = new Sphere(vec3(0, 10, 0), 10, new LambertianWithTextureMaterial(checkerTexture));
+
+	return new HitableList(hitableList, 2);
+}
+
 HitableList* getRandomWorld() {
 	int worldObjectCount = 500;
 
@@ -242,6 +252,10 @@ int main() {
 
 
 	HitableList* world = getRandomWorld();
+
+
+	world = getTwoSphereWorld();
+	camera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20.0, SCREEN_PARAM, 2, 0, 0);
 
 	try
 	{
