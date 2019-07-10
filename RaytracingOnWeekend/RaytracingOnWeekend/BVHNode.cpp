@@ -72,7 +72,7 @@ AABB* BVHNode::getHitable_AABB(float time0, float time1)
 
 
 /*
-	comparerX不能写在 类里。 qsort 的指针函数签名就是int 如果在类里，会有域的问题。
+	comparerX不能写在 类里。 qsort 的指针函数签名就是int 如果在类里，会有域的问题。 #include 包含的是整个文件 而不是类
 */
 int comparerX(const void* left, const void* right)
 {

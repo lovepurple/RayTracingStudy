@@ -8,6 +8,7 @@ class LambertianMaterial :
 	public Material
 {
 public:
+	LambertianMaterial(){}			//需要有个默认的构造，否则子类实现时会报错。。。
 	/**
 	 * albedo 指的是反射率
 

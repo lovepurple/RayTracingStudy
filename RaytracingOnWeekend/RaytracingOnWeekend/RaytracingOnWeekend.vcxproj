@@ -128,17 +128,21 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="BVHNode.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Checker_Texture.h" />
     <ClInclude Include="DielectricMaterial.h" />
     <ClInclude Include="DRand48.h" />
     <ClInclude Include="Hitable.h" />
     <ClInclude Include="HitableList.h" />
     <ClInclude Include="LambertianMaterial.h" />
+    <ClInclude Include="LambertianWithTextureMaterial.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MetalMaterial.h" />
     <ClInclude Include="Moving_Sphere.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="SolidColorTexture.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vec3.h" />
   </ItemGroup>
@@ -146,18 +150,22 @@
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="BVHNode.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Checker_Texture.cpp" />
     <ClCompile Include="DielectricMaterial.cpp" />
     <ClCompile Include="DRand48.cpp" />
     <ClCompile Include="Hitable.cpp" />
     <ClCompile Include="HitableList.cpp" />
     <ClCompile Include="LambertianMaterial.cpp" />
+    <ClCompile Include="LambertianWithTextureMaterial.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MetalMaterial.cpp" />
     <ClCompile Include="Moving_Sphere.cpp" />
     <ClCompile Include="ray.cpp" />
     <ClCompile Include="ray_trace_main.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="SolidColorTexture.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vec3.cpp" />
   </ItemGroup>

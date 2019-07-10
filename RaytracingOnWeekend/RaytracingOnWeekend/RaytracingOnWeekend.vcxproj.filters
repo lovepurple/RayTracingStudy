@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Materials">
       <UniqueIdentifier>{95d4663b-bd90-49b2-9b92-5163f92ba6ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Texture">
+      <UniqueIdentifier>{35688718-fe91-41e5-b076-1a5ff40e4a65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ray.h">
@@ -58,6 +61,24 @@
       <Filter>Header Files\Materials</Filter>
     </ClInclude>
     <ClInclude Include="Moving_Sphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BVHNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="LambertianWithTextureMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidColorTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Checker_Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -105,6 +126,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Moving_Sphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BVHNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidColorTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LambertianWithTextureMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Checker_Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,6 +9,9 @@
 #include "Camera.h"
 #include "Utility.h"
 #include "LambertianMaterial.h"
+#include "LambertianWithTextureMaterial.h"
+#include "SolidColorTexture.h"
+#include "Checker_Texture.h"
 #include "MetalMaterial.h"
 #include "DielectricMaterial.h"
 #include <typeinfo>
@@ -185,7 +188,14 @@ HitableList* getRandomWorld() {
 	int worldObjectCount = 500;
 
 	Hitable** worldObjectList = new Hitable * [worldObjectCount + 1];
-	worldObjectList[0] = new Sphere(vec3(0, -1000, 1), 1000, new LambertianMaterial(vec3(0.5, 0.5, 0.5)));
+
+
+	Texture* checkerTexture = new Checker_Texture(new SolidColorTexture(vec3(0.2, 0.3, 0.1)), new SolidColorTexture(vec3(0.9, 0.9, 0.9)));
+	LambertianWithTextureMaterial* groundMat = new LambertianWithTextureMaterial(checkerTexture);
+
+
+
+	worldObjectList[0] = new Sphere(vec3(0, -1000, 1), 1000, groundMat);
 	int i = 1;
 	for (int a = -WORLD_WIDGET_COUNT; a < WORLD_WIDGET_COUNT; ++a)
 	{
@@ -217,9 +227,6 @@ HitableList* getRandomWorld() {
 }
 
 int main() {
-
-	int sizeOf = sizeof(int*);
-	return 0;
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
 
 	//以PPM格式记录
