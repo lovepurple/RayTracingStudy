@@ -13,6 +13,7 @@
 #include "SolidColorTexture.h"
 #include "Checker_Texture.h"
 #include "MetalMaterial.h"
+#include "NoiseTexture.h"
 #include "DielectricMaterial.h"
 #include <typeinfo>
 #include <time.h>
@@ -40,8 +41,10 @@ float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
 		return (-b - sqrt(discriminant)) / (2.0 * a);
 }
 
+Camera m_worldCamera;
 
 int m_reflectTimes = 0;
+
 
 vec3 get_skybox_color(const ray& cameraRay) {
 	vec3 normalized_direction = unit_vector(cameraRay.direction());
@@ -156,12 +159,6 @@ vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
 
 
 
-vec3 pixelToNormalizeUV(int pixelX, int pixelY) {
-
-	return vec3(pixelX / (RENDER_IMAGE_WIDTH - 1), pixelY / (RENDER_IMAGE_HEIGHT - 1));
-}
-
-
 HitableList* getHitableWorld() {
 	//加入扰动
 	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0, 0, -1)), 0.5f, new MetalMaterial(vec3(0.8, 0.6, 0.2), 0.1));
@@ -185,6 +182,7 @@ HitableList* getHitableWorld() {
 }
 
 HitableList* getTwoSphereWorld() {
+	m_worldCamera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20.0, SCREEN_PARAM, 2, 0, 0);
 	Texture* checkerTexture = new Checker_Texture(new SolidColorTexture(vec3(0.2, 0.3, 0.1)), new SolidColorTexture(vec3(0.9, 0.9, 0.9)));
 
 	Hitable** hitableList = new Hitable * [2];
@@ -194,7 +192,24 @@ HitableList* getTwoSphereWorld() {
 	return new HitableList(hitableList, 2);
 }
 
+/*
+	噪声图
+*/
+HitableList* getNoiseWorld() {
+
+	m_worldCamera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+
+	Texture* noiseTexturePtr = new NoiseTexture();
+	Hitable** hitableList = new Hitable * [2];
+	hitableList[0] = new Sphere(vec3(0, -1000, 0), 1000, new LambertianWithTextureMaterial(noiseTexturePtr));
+	hitableList[1] = new Sphere(vec3(0, 2, 0), 2, new LambertianWithTextureMaterial(noiseTexturePtr));
+
+	return new HitableList(hitableList, 2);
+}
+
 HitableList* getRandomWorld() {
+
+	m_worldCamera = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0, 0.0, 1.0);		// 快门时间[0,1]
 	int worldObjectCount = 500;
 
 	Hitable** worldObjectList = new Hitable * [worldObjectCount + 1];
@@ -237,6 +252,7 @@ HitableList* getRandomWorld() {
 }
 
 int main() {
+
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
 
 	//以PPM格式记录
@@ -248,14 +264,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	Camera camera = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0, 0.0, 1.0);		// 快门时间[0,1]
-
-
-	HitableList* world = getRandomWorld();
-
-
-	world = getTwoSphereWorld();
-	camera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20.0, SCREEN_PARAM, 2, 0, 0);
+	HitableList* world = getNoiseWorld();
 
 	try
 	{
@@ -272,7 +281,7 @@ int main() {
 					float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
 					float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
-					ray cameraRayToPixel = camera.get_camera_ray(texel_u, texel_v);
+					ray cameraRayToPixel = m_worldCamera.get_camera_ray(texel_u, texel_v);
 
 					pixelColor += color(cameraRayToPixel, world, 0);
 				}

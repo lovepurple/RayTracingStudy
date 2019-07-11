@@ -50,5 +50,21 @@ public:
 		区间映射
 	*/
 	static float remap(float currentVal, float inputMin, float inputMax, float outMin, float outMax);
+
+	/*
+		@brief:获取小数部分
+	*/
+	static float frac(float val);
+
+	/*
+		@brief:smoothstep 平滑函数
+	*/
+	static float smoothstep(float val);
+
+	/*
+		@brief:随机list,还是洗牌算法
+	*/
+	static void shuffleArray(int* arr, int size);
+
 };
 

@@ -49,3 +49,27 @@ float Utility::remap(float currentVal, float inputMin, float inputMax, float out
 	float ratio = (outMax - outMin) / (inputMax - inputMin);
 	return outMin + ratio * (currentVal - inputMin);
 }
+
+float Utility::frac(float val)
+{
+	return val - floor(val);
+}
+
+float Utility::smoothstep(float val)
+{
+	return val * val * val * (6 * val * val - 15 * val + 10);		//6t^5-15t^4+10t^3
+}
+
+void Utility::shuffleArray(int* arr, int size)
+{
+	int arraySize = size;
+	while (arraySize > 1)
+	{
+		arraySize--;
+		int index = int(DRand48::drand48() * arraySize);
+
+		int temp = arr[arraySize];
+		arr[arraySize] = arr[index];
+		arr[index] = temp;
+	}
+}
