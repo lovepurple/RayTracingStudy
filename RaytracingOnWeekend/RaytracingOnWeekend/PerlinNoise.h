@@ -14,12 +14,17 @@ public:
 	/**
 	 * @brief:获取point的 Perlin 噪声值
 	 */
-	static float perlinNose(const vec3& point);
+	static float perlinNoise(const vec3& point);
 
 	/**
 	 * @brief:根据hitpoint的位置各种随机获取一个噪声值
 	 */
 	static float getRandomNoise(const vec3& point);
+
+	/**
+	 * @brief:PerlinNoise原理性的过程，在点所在立方体内的随机噪声
+	 */
+	static float noiseInCubic(const vec3& point);
 
 	/*
 	   @brief:生成随机数组，用于grid获取随机方向梯度

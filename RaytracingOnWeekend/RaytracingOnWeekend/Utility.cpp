@@ -73,3 +73,19 @@ void Utility::shuffleArray(int* arr, int size)
 		arr[index] = temp;
 	}
 }
+
+float Utility::bilinear_interpolate(float a, float b, float c, float d, float factorX, float factorY)
+{
+	float s = Utility::lerp(a, b, factorX);
+	float t = Utility::lerp(c, d, factorX);
+
+	return Utility::lerp(s, t, factorY);
+}
+
+float Utility::trilinear_interpolate(float a0, float b0, float c0, float d0, float a, float b, float c, float d, float factorX, float factorY, float factorZ)
+{
+	float s = Utility::bilinear_interpolate(a0, b0, c0, d0, factorX, factorY);
+	float t = Utility::bilinear_interpolate(a, b, c, d, factorX, factorY);
+
+	return Utility::lerp(s, t, factorZ);
+}

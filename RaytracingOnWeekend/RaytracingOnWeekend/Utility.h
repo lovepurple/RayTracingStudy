@@ -66,5 +66,15 @@ public:
 	*/
 	static void shuffleArray(int* arr, int size);
 
+	/*
+		@brief:2D线性差值
+		lerp也叫1D线性差值，bilinear 是在1D基础上
+	*/
+	static float bilinear_interpolate(float a, float b, float c, float d, float factorX, float factorY);
+
+	/*
+		@brief:3D线性差值
+	*/
+	static float trilinear_interpolate(float a0, float b0, float c0, float d0, float a, float b, float c, float d, float factorX, float factorY, float factorZ);
 };
 

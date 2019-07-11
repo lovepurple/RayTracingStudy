@@ -129,6 +129,7 @@
     <ClInclude Include="BVHNode.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Checker_Texture.h" />
+    <ClInclude Include="CubicInterpolateNoiseTexture.h" />
     <ClInclude Include="DielectricMaterial.h" />
     <ClInclude Include="DRand48.h" />
     <ClInclude Include="Hitable.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="BVHNode.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Checker_Texture.cpp" />
+    <ClCompile Include="CubicInterpolateNoiseTexture.cpp" />
     <ClCompile Include="DielectricMaterial.cpp" />
     <ClCompile Include="DRand48.cpp" />
     <ClCompile Include="Hitable.cpp" />

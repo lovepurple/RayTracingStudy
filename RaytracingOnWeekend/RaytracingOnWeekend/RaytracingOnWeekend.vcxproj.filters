@@ -87,6 +87,9 @@
     <ClInclude Include="NoiseTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="CubicInterpolateNoiseTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ray.cpp">
@@ -156,6 +159,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NoiseTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CubicInterpolateNoiseTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
