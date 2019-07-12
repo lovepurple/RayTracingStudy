@@ -141,6 +141,7 @@
     <ClInclude Include="Moving_Sphere.h" />
     <ClInclude Include="NoiseTexture.h" />
     <ClInclude Include="PerlinNoise.h" />
+    <ClInclude Include="PerlinNoiseTexture.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SolidColorTexture.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Moving_Sphere.cpp" />
     <ClCompile Include="NoiseTexture.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
+    <ClCompile Include="PerlinNoiseTexture.cpp" />
     <ClCompile Include="ray.cpp" />
     <ClCompile Include="ray_trace_main.cpp" />
     <ClCompile Include="Screen.cpp" />

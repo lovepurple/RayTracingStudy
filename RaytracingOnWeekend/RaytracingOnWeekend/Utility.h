@@ -47,6 +47,11 @@ public:
 	inline static float lerp(float a, float b, float lerpFactor01) { return a + (b - a) * lerpFactor01; }
 
 	/*
+		lerp
+	*/
+	static vec3 lerp(vec3 a, vec3 b, float factor);
+
+	/*
 		区间映射
 	*/
 	static float remap(float currentVal, float inputMin, float inputMax, float outMin, float outMax);
@@ -62,6 +67,11 @@ public:
 	static float smoothstep(float val);
 
 	/*
+		@brief:vec3 的smoothstep平滑函数
+	*/
+	static vec3 smoothstep(vec3 val);
+
+	/*
 		@brief:随机list,还是洗牌算法
 	*/
 	static void shuffleArray(int* arr, int size);
@@ -71,6 +81,11 @@ public:
 		lerp也叫1D线性差值，bilinear 是在1D基础上
 	*/
 	static float bilinear_interpolate(float a, float b, float c, float d, float factorX, float factorY);
+
+	/*
+		@brief:Vector3的双线性差值
+	*/
+
 
 	/*
 		@brief:3D线性差值

@@ -14,6 +14,7 @@
 #include "Checker_Texture.h"
 #include "MetalMaterial.h"
 #include "NoiseTexture.h"
+#include "PerlinNoiseTexture.h"
 #include "CubicInterpolateNoiseTexture.h"
 #include "DielectricMaterial.h"
 #include <typeinfo>
@@ -219,6 +220,17 @@ HitableList* getCubicNoiseWorld() {
 	return new HitableList(hitableList, 2);
 }
 
+HitableList* getPerlinNoiseWorld() {
+	m_worldCamera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+
+	Texture* noiseTexturePtr = new PerlinNoiseTexture(5.0);
+	Hitable** hitableList = new Hitable * [2];
+	hitableList[0] = new Sphere(vec3(0, -1000, 0), 1000, new LambertianWithTextureMaterial(noiseTexturePtr));
+	hitableList[1] = new Sphere(vec3(0, 2, 0), 2, new LambertianWithTextureMaterial(noiseTexturePtr));
+
+	return new HitableList(hitableList, 2);
+}
+
 HitableList* getRandomWorld() {
 
 	m_worldCamera = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0, 0.0, 1.0);		// 快门时间[0,1]
@@ -276,7 +288,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	HitableList* world = getCubicNoiseWorld();
+	HitableList* world = getPerlinNoiseWorld();
 
 	try
 	{

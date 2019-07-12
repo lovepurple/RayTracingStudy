@@ -44,6 +44,11 @@ float Utility::rad2deg(float rad)
 	return  (rad / M_PI) * 180.f;
 }
 
+vec3 Utility::lerp(vec3 a, vec3 b, float factor)
+{
+	return vec3(lerp(a.x(), b.x(), factor), lerp(a.y(), b.y(), factor), lerp(a.z(), b.z(), factor));
+}
+
 float Utility::remap(float currentVal, float inputMin, float inputMax, float outMin, float outMax)
 {
 	float ratio = (outMax - outMin) / (inputMax - inputMin);
@@ -58,6 +63,11 @@ float Utility::frac(float val)
 float Utility::smoothstep(float val)
 {
 	return val * val * val * (6 * val * val - 15 * val + 10);		//6t^5-15t^4+10t^3
+}
+
+vec3 Utility::smoothstep(vec3 val)
+{
+	return  vec3(Utility::smoothstep(val.x()), Utility::smoothstep(val.y()), Utility::smoothstep(val.z()));
 }
 
 void Utility::shuffleArray(int* arr, int size)

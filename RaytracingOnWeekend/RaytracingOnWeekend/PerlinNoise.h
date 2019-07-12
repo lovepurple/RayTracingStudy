@@ -42,7 +42,7 @@ public:
 		129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
 		251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
 		49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
-		138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
+		138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,151
 	};
 	*/
 	static float* permute_generater();
@@ -52,8 +52,29 @@ public:
 	*/
 	static int* perlin_permute_axis();
 
+	//周期频率函数  也叫turbulence 加入其它点对于当前点的贡献
+	static float Fbm(vec3 point, int octave);
+
+
 	//一个总的随机器
 	static float* perlin_permutation;
+private:
+
+	/*
+		随机梯度生成器
+	*/
+	static vec3* permuate_vector_generator();
+
+	/*
+		随机梯度Hash表 ,使用真实的PerlinNoise的实现，原书中的 trilinear_interpo有点难理解
+	*/
+	static int* perlin_permution_table;
+
+	//随机梯度值 获取u,v,w 位置的随机梯度值
+	static float Gradient(int hash, float u, float v, float w);
+
+
+
 
 	static int* permute_x;
 	static int* permute_y;
