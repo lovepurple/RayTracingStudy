@@ -21,7 +21,7 @@
 #include <time.h>
 
 #define cout fout
-#define MAX_TRACING_TIMES 3		//最大追踪次数
+#define MAX_TRACING_TIMES 100		//最大追踪次数
 #define WORLD_WIDGET_COUNT 5
 
 
