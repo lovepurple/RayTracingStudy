@@ -19,6 +19,11 @@
 #include "DielectricMaterial.h"
 #include <typeinfo>
 #include <time.h>
+#include "ImageTexture.h"
+
+//stb 第三方库，非常不错
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #define cout fout
 #define MAX_TRACING_TIMES 100		//最大追踪次数
@@ -275,6 +280,24 @@ HitableList* getRandomWorld() {
 	return new HitableList(worldObjectList, i);
 }
 
+/*
+	@brief:UV计算
+*/
+HitableList* getTextureMappingWorld() {
+	m_worldCamera = Camera(vec3(13, 3, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+
+	int width;
+	int height;
+	int channels;
+	unsigned char* pixels = stbi_load("./Textures/earth.png", &width, &height, &channels, 0);
+
+	Texture* customTexturePtr = new ImageTexture(pixels, width, height, E_CLAMP);
+	Hitable** hitableList = new Hitable * [2];
+	hitableList[0] = new Sphere(vec3(0, 0, 0), 1.0f, new LambertianWithTextureMaterial(customTexturePtr));
+
+	return new HitableList(hitableList, 1);
+}
+
 int main() {
 
 	std::ofstream fout("d:\\renderImage.ppm");			//重定向cout到文件
@@ -288,7 +311,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	HitableList* world = getPerlinNoiseWorld();
+	HitableList* world = getTextureMappingWorld();
 
 	try
 	{

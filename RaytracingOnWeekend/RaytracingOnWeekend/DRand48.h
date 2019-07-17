@@ -1,8 +1,8 @@
 #pragma once
 #include <stdlib.h>
 #define m1 0x100000000LL		//同一个宏在一个程序中（包括各种include ）只能有一次
-#define c1 0xB16  
-#define a1 0x5DEECE66DLL  
+#define c10 0xB16  
+#define a10 0x5DEECE66DLL  
 
 class DRand48
 {

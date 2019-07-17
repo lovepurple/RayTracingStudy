@@ -99,3 +99,19 @@ float Utility::trilinear_interpolate(float a0, float b0, float c0, float d0, flo
 
 	return Utility::lerp(s, t, factorZ);
 }
+
+vec3 Utility::get_uv_by_sphere_point(const vec3 pointOnSphere)
+{
+	//水平面的角度
+	float phi = atan2(pointOnSphere.z(), pointOnSphere.x());
+
+	float theta = asin(pointOnSphere.y());
+
+	//[-PI,PI] ->[0,1]
+	float u = phi * 0.5 * M_1_PI + 0.5f;		//(phi / 2*pi) +0.5		哪个是0，0点（模型上哪个点是对应0,0）需要以后再确认
+
+	//[-0.5*PI,0.5*PI] ->[0,1]
+	float v = theta * M_1_PI + 0.5;
+
+	return vec3(u, v);
+}

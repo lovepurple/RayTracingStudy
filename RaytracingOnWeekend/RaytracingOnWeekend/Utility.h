@@ -91,5 +91,11 @@ public:
 		@brief:3D线性差值
 	*/
 	static float trilinear_interpolate(float a0, float b0, float c0, float d0, float a, float b, float c, float d, float factorX, float factorY, float factorZ);
+
+	/*
+		@brief:获取球面上点的UV坐标
+
+	*/
+	static vec3 get_uv_by_sphere_point(const vec3 pointOnSphere);
 };
 

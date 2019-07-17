@@ -4,7 +4,7 @@ long long DRand48::seed = 123456;
 
 double DRand48::drand48()
 {
-	seed = (a1 * seed + c1) & 0xFFFFFFFFFFFFLL;
+	seed = (a10 * seed + c10) & 0xFFFFFFFFFFFFLL;
 	unsigned int x = seed >> 16;
 
 	return ((double)x / (double)m1);

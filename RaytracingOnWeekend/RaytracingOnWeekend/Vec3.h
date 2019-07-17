@@ -19,6 +19,9 @@ public:
 	inline float g() const { return e[1]; }
 	inline float b() const { return e[2]; }
 
+	inline float u() const { return e[0]; }
+	inline float v() const { return e[1]; }
+
 	inline const vec3& operator+() const { return *this; }
 	inline vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
 	inline float operator[](int i) const { return e[i]; }			//C++É¶¶¼ÄÜÖØÔØ¡£¡£¡£
