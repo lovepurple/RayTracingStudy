@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include "Sphere.h"
 #include "Moving_Sphere.h"
 #include "HitableList.h"
 #include "float.h"
