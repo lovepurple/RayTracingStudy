@@ -158,6 +158,8 @@
     <ClInclude Include="Vec3.h" />
     <ClInclude Include="WorldBase.h" />
     <ClInclude Include="XY_Rect.h" />
+    <ClInclude Include="XZ_Rect.h" />
+    <ClInclude Include="YZ_Rect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
@@ -193,6 +195,8 @@
     <ClCompile Include="Vec3.cpp" />
     <ClCompile Include="WorldBase.cpp" />
     <ClCompile Include="XY_Rect.cpp" />
+    <ClCompile Include="XZ_Rect.cpp" />
+    <ClCompile Include="YZ_Rect.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
