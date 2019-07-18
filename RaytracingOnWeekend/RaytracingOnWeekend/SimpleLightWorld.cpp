@@ -28,5 +28,8 @@ HitableList* SimpleLightWorld::getWorldHitable()
 
 Camera SimpleLightWorld::getWorldCamera()
 {
-	return this->m_worldCamera = Camera(vec3(13, 4, 10), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+	if (this->m_worldCamera == nullptr)
+		this->m_worldCamera = new Camera(vec3(13, 4, 10), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+
+	return *(this->m_worldCamera);
 }

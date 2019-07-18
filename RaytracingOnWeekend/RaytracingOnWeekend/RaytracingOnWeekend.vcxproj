@@ -143,6 +143,7 @@
     <ClInclude Include="NoiseTexture.h" />
     <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="PerlinNoiseTexture.h" />
+    <ClInclude Include="PerlinNoiseWorld.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SimpleLightWorld.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="NoiseTexture.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="PerlinNoiseTexture.cpp" />
+    <ClCompile Include="PerlinNoiseWorld.cpp" />
     <ClCompile Include="ray.cpp" />
     <ClCompile Include="ray_trace_main.cpp" />
     <ClCompile Include="Screen.cpp" />
