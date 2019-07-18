@@ -1,10 +1,14 @@
 #pragma once
 /*
-	Â³Ã©ÃÃ³worldBase
+	³éÏóworldBase
 */
 #include "HitableList.h"
 #include "Camera.h"
 #include "LambertianWithTextureMaterial.h"
+<<<<<<< HEAD
+=======
+#include "Sphere.h"
+>>>>>>> master
 
 class WorldBase
 {

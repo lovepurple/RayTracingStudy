@@ -1,6 +1,10 @@
 #pragma once
 #include "WorldBase.h"
 #include "PerlinNoiseTexture.h"
+<<<<<<< HEAD
+#include "Sphere.h"
+=======
+>>>>>>> master
 
 class PerlinNoiseWorld :
 	public WorldBase

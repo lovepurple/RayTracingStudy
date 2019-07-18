@@ -1,15 +1,13 @@
 #pragma once
 #include "WorldBase.h"
-#include "PerlinNoiseTexture.h"
+#include "Checker_Texture.h"
+#include "SolidColorTexture.h"
 
-class PerlinNoiseWorld :
+class CheckerTextureWorld :
 	public WorldBase
 {
-
-public:
+	// Inherited via WorldBase
 	virtual HitableList* getWorldHitable() override;
-
-
 	virtual Camera getWorldCamera() override;
-
 };
+
