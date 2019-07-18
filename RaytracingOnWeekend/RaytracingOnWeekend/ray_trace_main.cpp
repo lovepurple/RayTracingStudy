@@ -2,15 +2,11 @@
 #include <iostream>
 #include <fstream>
 #include "Moving_Sphere.h"
-#include "HitableList.h"
 #include "float.h"
-#include "Camera.h"
 #include "Utility.h"
 #include "LambertianMaterial.h"
 #include "LambertianWithTextureMaterial.h"
 #include "MetalMaterial.h"
-#include "NoiseTexture.h"
-#include "PerlinNoiseTexture.h"
 #include "CubicInterpolateNoiseTexture.h"
 #include "DielectricMaterial.h"
 #include <time.h>
