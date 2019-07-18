@@ -19,8 +19,7 @@
 #include <typeinfo>
 #include <time.h>
 #include "PerlinNoiseWorld.h"
-#include "stb_image.h"
-#include "ImageTexture.h"
+#include "TextureMappingWorld.h"
 
 #define cout fout
 #define MAX_TRACING_TIMES 3		//最大追踪次数
@@ -254,23 +253,6 @@ HitableList* getRandomWorld() {
 	return new HitableList(worldObjectList, i);
 }
 
-/*
-	@brief:UV计算
-*/
-HitableList* getTextureMappingWorld() {
-	m_worldCamera_Obsoleted = Camera(vec3(13, 3, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
-
-	int width;
-	int height;
-	int channels;
-	unsigned char* pixels = stbi_load("./Textures/earth.png", &width, &height, &channels, 0);
-
-	Texture* customTexturePtr = new ImageTexture(pixels, width, height, E_CLAMP);
-	Hitable** hitableList = new Hitable * [2];
-	hitableList[0] = new Sphere(vec3(0, 0, 0), 1.0f, new LambertianWithTextureMaterial(customTexturePtr));
-
-	return new HitableList(hitableList, 1);
-}
 
 int main() {
 
@@ -285,7 +267,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	WorldBase* perlinWorld = new PerlinNoiseWorld();
+	WorldBase* perlinWorld = new TextureMappingWorld();
 
 	try
 	{

@@ -1,15 +1,16 @@
 #pragma once
 #include "WorldBase.h"
-#include "PerlinNoiseTexture.h"
+#include "ImageTexture.h"
 
-class PerlinNoiseWorld :
+/*
+	球面坐标及UV映射的测试场景
+*/
+
+class TextureMappingWorld :
 	public WorldBase
 {
-
-public:
+	// Inherited via WorldBase
 	virtual HitableList* getWorldHitable() override;
-
-
 	virtual Camera getWorldCamera() override;
-
 };
+
