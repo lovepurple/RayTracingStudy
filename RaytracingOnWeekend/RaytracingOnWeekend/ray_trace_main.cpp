@@ -5,7 +5,6 @@
 #include "Moving_Sphere.h"
 #include "HitableList.h"
 #include "float.h"
-#include "Screen.h"
 #include "Camera.h"
 #include "Utility.h"
 #include "LambertianMaterial.h"
@@ -19,14 +18,10 @@
 #include "DielectricMaterial.h"
 #include <typeinfo>
 #include <time.h>
-#include "ImageTexture.h"
-
-//stb 第三方库，非常不错
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "PerlinNoiseWorld.h"
 
 #define cout fout
-#define MAX_TRACING_TIMES 100		//最大追踪次数
+#define MAX_TRACING_TIMES 3		//最大追踪次数
 #define WORLD_WIDGET_COUNT 5
 
 
@@ -48,7 +43,7 @@ float hit_sphere(const vec3 & center, float sphereRadius, const ray & r) {
 		return (-b - sqrt(discriminant)) / (2.0 * a);
 }
 
-Camera m_worldCamera;
+Camera m_worldCamera_Obsoleted;
 
 int m_reflectTimes = 0;
 
@@ -133,16 +128,19 @@ vec3 color(const ray& tracingRay, Hitable* world, int tracingTimes) {
 		vec3 attenuation;
 		bool isContinueTracing = hitInfo.mat_ptr->scatter(tracingRay, hitInfo, attenuation, outRay);
 
+		//加入自发光  Color = Lambertian + Emission 
+		vec3 emissionColor = hitInfo.mat_ptr->emitted(0, 0, hitInfo.HitPoint);
+
 		//光线根据击中材质的不同进一步散射
 		if (tracingTimes < MAX_TRACING_TIMES && isContinueTracing)
 		{
-			return attenuation * color(outRay, world, ++tracingTimes);
+			return attenuation * color(outRay, world, ++tracingTimes) + emissionColor;
 		}
 		else
-			return vec3::ZERO;			//一个像素会进行多次追踪，有可能该点就是黑色的
+			return emissionColor;			//一个像素会进行多次追踪，有可能该点就是黑色的
 	}
 	else
-		return get_skybox_color(tracingRay);
+		return get_skybox_color(tracingRay);			//黑背景		
 }
 
 vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
@@ -189,7 +187,7 @@ HitableList* getHitableWorld() {
 }
 
 HitableList* getTwoSphereWorld() {
-	m_worldCamera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20.0, SCREEN_PARAM, 2, 0, 0);
+	m_worldCamera_Obsoleted = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20.0, SCREEN_PARAM, 2, 0, 0);
 	Texture* checkerTexture = new Checker_Texture(new SolidColorTexture(vec3(0.2, 0.3, 0.1)), new SolidColorTexture(vec3(0.9, 0.9, 0.9)));
 
 	Hitable** hitableList = new Hitable * [2];
@@ -199,23 +197,9 @@ HitableList* getTwoSphereWorld() {
 	return new HitableList(hitableList, 2);
 }
 
-/*
-	噪声图
-*/
-HitableList* getNoiseWorld() {
-
-	m_worldCamera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
-
-	Texture* noiseTexturePtr = new NoiseTexture();
-	Hitable** hitableList = new Hitable * [2];
-	hitableList[0] = new Sphere(vec3(0, -1000, 0), 1000, new LambertianWithTextureMaterial(noiseTexturePtr));
-	hitableList[1] = new Sphere(vec3(0, 2, 0), 2, new LambertianWithTextureMaterial(noiseTexturePtr));
-
-	return new HitableList(hitableList, 2);
-}
 
 HitableList* getCubicNoiseWorld() {
-	m_worldCamera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+	m_worldCamera_Obsoleted = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
 
 	Texture* noiseTexturePtr = new CubicInterpolateNoiseTexture(5.0);
 	Hitable** hitableList = new Hitable * [2];
@@ -225,20 +209,10 @@ HitableList* getCubicNoiseWorld() {
 	return new HitableList(hitableList, 2);
 }
 
-HitableList* getPerlinNoiseWorld() {
-	m_worldCamera = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
-
-	Texture* noiseTexturePtr = new PerlinNoiseTexture(5.0);
-	Hitable** hitableList = new Hitable * [2];
-	hitableList[0] = new Sphere(vec3(0, -1000, 0), 1000, new LambertianWithTextureMaterial(noiseTexturePtr));
-	hitableList[1] = new Sphere(vec3(0, 2, 0), 2, new LambertianWithTextureMaterial(noiseTexturePtr));
-
-	return new HitableList(hitableList, 2);
-}
 
 HitableList* getRandomWorld() {
 
-	m_worldCamera = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0, 0.0, 1.0);		// 快门时间[0,1]
+	m_worldCamera_Obsoleted = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0, 0.0, 1.0);		// 快门时间[0,1]
 	int worldObjectCount = 500;
 
 	Hitable** worldObjectList = new Hitable * [worldObjectCount + 1];
@@ -246,8 +220,6 @@ HitableList* getRandomWorld() {
 
 	Texture* checkerTexture = new Checker_Texture(new SolidColorTexture(vec3(0.2, 0.3, 0.1)), new SolidColorTexture(vec3(0.9, 0.9, 0.9)));
 	LambertianWithTextureMaterial* groundMat = new LambertianWithTextureMaterial(checkerTexture);
-
-
 
 	worldObjectList[0] = new Sphere(vec3(0, -1000, 1), 1000, groundMat);
 	int i = 1;
@@ -311,7 +283,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	HitableList* world = getTextureMappingWorld();
+	WorldBase* perlinWorld = new PerlinNoiseWorld();
 
 	try
 	{
@@ -328,9 +300,9 @@ int main() {
 					float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
 					float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
-					ray cameraRayToPixel = m_worldCamera.get_camera_ray(texel_u, texel_v);
+					ray cameraRayToPixel = perlinWorld->getWorldCamera().get_camera_ray(texel_u, texel_v);
 
-					pixelColor += color(cameraRayToPixel, world, 0);
+					pixelColor += color(cameraRayToPixel, perlinWorld->getWorldHitable(), 0);
 				}
 				pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
 

@@ -16,6 +16,11 @@ public:
 	virtual bool scatter(const ray& incidentRay, const HitInfo& hitInfo, vec3& attenuation, ray& outRay) const = 0;
 
 	/*
+		@brief:击中点自发光的颜色
+	*/
+	virtual vec3 emitted(float u, float v, const vec3& hitPoint) const;
+
+	/*
 		衰减
 	*/
 	vec3 m_albedo;

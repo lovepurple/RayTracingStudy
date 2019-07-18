@@ -18,6 +18,7 @@ struct HitInfo
 	vec3 HitPoint;
 	vec3 HitPointNormal;
 	Material* mat_ptr;		//所属材质，当多处引用一个对象时，使用指针
+	vec3 hitPointUV;
 };
 
 
@@ -28,7 +29,7 @@ public:
 	virtual bool Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) const = 0;
 
 	//获取物体的AABB time0,time1表示可移动的物体的时间计算
-	virtual AABB* getHitable_AABB(float time0, float time1) { return m_hitableObjectAABB; };
+ 	virtual AABB* getHitable_AABB(float time0, float time1) { return m_hitableObjectAABB; };
 
 protected:
 	AABB* m_hitableObjectAABB;
