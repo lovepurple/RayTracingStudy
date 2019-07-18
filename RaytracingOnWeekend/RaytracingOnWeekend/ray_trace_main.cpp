@@ -19,6 +19,8 @@
 #include <typeinfo>
 #include <time.h>
 #include "PerlinNoiseWorld.h"
+#include "stb_image.h"
+#include "ImageTexture.h"
 
 #define cout fout
 #define MAX_TRACING_TIMES 3		//最大追踪次数
@@ -256,7 +258,7 @@ HitableList* getRandomWorld() {
 	@brief:UV计算
 */
 HitableList* getTextureMappingWorld() {
-	m_worldCamera = Camera(vec3(13, 3, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+	m_worldCamera_Obsoleted = Camera(vec3(13, 3, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
 
 	int width;
 	int height;
