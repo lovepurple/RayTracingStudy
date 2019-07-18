@@ -19,15 +19,21 @@
     <Filter Include="Header Files\Texture">
       <UniqueIdentifier>{35688718-fe91-41e5-b076-1a5ff40e4a65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Lights">
+      <UniqueIdentifier>{9b664494-b9f1-4caa-9efb-1a4525d5afdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\HitableObjects">
+      <UniqueIdentifier>{50e60768-6c09-431f-9aee-e5e75a3df838}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World">
+      <UniqueIdentifier>{50835b81-13e6-4af7-8107-3cdd0c2aa89d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hitable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HitableList.h">
@@ -60,9 +66,6 @@
     <ClInclude Include="DielectricMaterial.h">
       <Filter>Header Files\Materials</Filter>
     </ClInclude>
-    <ClInclude Include="Moving_Sphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,14 +75,8 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="LambertianWithTextureMaterial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SolidColorTexture.h">
       <Filter>Header Files\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Checker_Texture.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PerlinNoise.h">
       <Filter>Header Files</Filter>
@@ -93,6 +90,39 @@
     <ClInclude Include="PerlinNoiseTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="ImageTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Moving_Sphere.h">
+      <Filter>Header Files\HitableObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Header Files\HitableObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="LambertianWithTextureMaterial.h">
+      <Filter>Header Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="DiffuseLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Checker_Texture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="XY_Rect.h">
+      <Filter>Header Files\HitableObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleLightWorld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+>>>>>>> bb443e6... 抽象world
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ray.cpp">
@@ -170,5 +200,23 @@
     <ClCompile Include="PerlinNoiseTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="ImageTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiffuseLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XY_Rect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleLightWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+>>>>>>> bb443e6... 抽象world
   </ItemGroup>
 </Project>

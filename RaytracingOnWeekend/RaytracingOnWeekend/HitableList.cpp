@@ -16,6 +16,7 @@ bool HitableList::Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo
 			isHit = true;
 			cloese_so_far = iterator_hitInfo.HitRay_Factor;
 			hitInfo = iterator_hitInfo;
+			//hitInfo.hitPointUV = Utility::get_uv_by_sphere_point(hitInfo.HitPoint);
 		}
 	}
 

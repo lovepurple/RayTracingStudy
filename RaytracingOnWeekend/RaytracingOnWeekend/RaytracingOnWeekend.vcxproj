@@ -131,6 +131,7 @@
     <ClInclude Include="Checker_Texture.h" />
     <ClInclude Include="CubicInterpolateNoiseTexture.h" />
     <ClInclude Include="DielectricMaterial.h" />
+    <ClInclude Include="DiffuseLight.h" />
     <ClInclude Include="DRand48.h" />
     <ClInclude Include="Hitable.h" />
     <ClInclude Include="HitableList.h" />
@@ -144,11 +145,14 @@
     <ClInclude Include="PerlinNoiseTexture.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="SimpleLightWorld.h" />
     <ClInclude Include="SolidColorTexture.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vec3.h" />
+    <ClInclude Include="WorldBase.h" />
+    <ClInclude Include="XY_Rect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
@@ -157,6 +161,7 @@
     <ClCompile Include="Checker_Texture.cpp" />
     <ClCompile Include="CubicInterpolateNoiseTexture.cpp" />
     <ClCompile Include="DielectricMaterial.cpp" />
+    <ClCompile Include="DiffuseLight.cpp" />
     <ClCompile Include="DRand48.cpp" />
     <ClCompile Include="Hitable.cpp" />
     <ClCompile Include="HitableList.cpp" />
@@ -171,11 +176,14 @@
     <ClCompile Include="ray.cpp" />
     <ClCompile Include="ray_trace_main.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="SimpleLightWorld.cpp" />
     <ClCompile Include="SolidColorTexture.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vec3.cpp" />
+    <ClCompile Include="WorldBase.cpp" />
+    <ClCompile Include="XY_Rect.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 #pragma once
 #include "Hitable.h"
-
+#include "Utility.h"
 /**
  * 击中列表，场景里多物体时的击中判断
  */
