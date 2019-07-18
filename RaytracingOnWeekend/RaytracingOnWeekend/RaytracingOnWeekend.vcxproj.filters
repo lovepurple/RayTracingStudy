@@ -33,6 +33,7 @@
     <ClCompile Include="WorldBase.cpp" />
     <ClCompile Include="XY_Rect.cpp" />
     <ClCompile Include="TextureMappingWorld.cpp" />
+    <ClCompile Include="CheckerTextureWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
@@ -67,5 +68,6 @@
     <ClInclude Include="WorldBase.h" />
     <ClInclude Include="XY_Rect.h" />
     <ClInclude Include="TextureMappingWorld.h" />
+    <ClInclude Include="CheckerTextureWorld.h" />
   </ItemGroup>
 </Project>

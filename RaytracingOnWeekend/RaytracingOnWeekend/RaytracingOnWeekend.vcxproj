@@ -128,6 +128,7 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="BVHNode.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CheckerTextureWorld.h" />
     <ClInclude Include="Checker_Texture.h" />
     <ClInclude Include="CubicInterpolateNoiseTexture.h" />
     <ClInclude Include="DielectricMaterial.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="BVHNode.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CheckerTextureWorld.cpp" />
     <ClCompile Include="Checker_Texture.cpp" />
     <ClCompile Include="CubicInterpolateNoiseTexture.cpp" />
     <ClCompile Include="DielectricMaterial.cpp" />

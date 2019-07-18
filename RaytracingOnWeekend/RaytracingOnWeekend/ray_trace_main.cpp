@@ -8,17 +8,15 @@
 #include "Utility.h"
 #include "LambertianMaterial.h"
 #include "LambertianWithTextureMaterial.h"
-#include "SolidColorTexture.h"
-#include "Checker_Texture.h"
 #include "MetalMaterial.h"
 #include "NoiseTexture.h"
 #include "PerlinNoiseTexture.h"
 #include "CubicInterpolateNoiseTexture.h"
 #include "DielectricMaterial.h"
-#include <typeinfo>
 #include <time.h>
 #include "PerlinNoiseWorld.h"
 #include "TextureMappingWorld.h"
+#include "CheckerTextureWorld.h"
 
 #define cout fout
 #define MAX_TRACING_TIMES 3		//最大追踪次数
@@ -186,17 +184,6 @@ HitableList* getHitableWorld() {
 	return world;
 }
 
-HitableList* getTwoSphereWorld() {
-	m_worldCamera_Obsoleted = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20.0, SCREEN_PARAM, 2, 0, 0);
-	Texture* checkerTexture = new Checker_Texture(new SolidColorTexture(vec3(0.2, 0.3, 0.1)), new SolidColorTexture(vec3(0.9, 0.9, 0.9)));
-
-	Hitable** hitableList = new Hitable * [2];
-	hitableList[0] = new Sphere(vec3(0, -10, 0), 10, new LambertianWithTextureMaterial(checkerTexture));
-	hitableList[1] = new Sphere(vec3(0, 10, 0), 10, new LambertianWithTextureMaterial(checkerTexture));
-
-	return new HitableList(hitableList, 2);
-}
-
 
 HitableList* getCubicNoiseWorld() {
 	m_worldCamera_Obsoleted = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
@@ -266,7 +253,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	WorldBase* perlinWorld = new TextureMappingWorld();
+	WorldBase* perlinWorld = new CheckerTextureWorld();
 
 	try
 	{
