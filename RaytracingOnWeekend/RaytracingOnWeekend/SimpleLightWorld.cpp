@@ -16,9 +16,9 @@ HitableList* SimpleLightWorld::getWorldHitable()
 		DiffuseLight* lightMat = new DiffuseLight(lightColorTexture);
 
 		worldHitableList[m_worldObjectCount++] = new Sphere(vec3(0, -100, 0), 1000, perlinMat);
-		worldHitableList[m_worldObjectCount++] = new Sphere(vec3(0, 2, 0), 2, perlinMat);
-		worldHitableList[m_worldObjectCount++] = new Sphere(vec3(0, 7, 0), 2, lightMat);
-		worldHitableList[m_worldObjectCount++] = new XY_Rect(3, 5, 1, 3, -2, lightMat);
+		worldHitableList[m_worldObjectCount++] = new Sphere(vec3::ZERO, 2, perlinMat);
+		worldHitableList[m_worldObjectCount++] = new Sphere(vec3(0, 5, 0), 2, lightMat);
+		worldHitableList[m_worldObjectCount++] = new XY_Rect(2, 5, -2, 2, -2, lightMat);
 
 		this->m_worldObjectList = new HitableList(worldHitableList, this->m_worldObjectCount);
 	}
@@ -29,7 +29,7 @@ HitableList* SimpleLightWorld::getWorldHitable()
 Camera SimpleLightWorld::getWorldCamera()
 {
 	if (this->m_worldCamera == nullptr)
-		this->m_worldCamera = new Camera(vec3(13, 4, 10), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+		this->m_worldCamera = new Camera(vec3(13, 0, 15), vec3::ZERO, vec3::UP, 30, SCREEN_PARAM, 0, 0, 0);
 
 	return *(this->m_worldCamera);
 }

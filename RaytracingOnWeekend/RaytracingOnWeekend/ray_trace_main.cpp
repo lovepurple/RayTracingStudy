@@ -17,6 +17,7 @@
 #include "PerlinNoiseWorld.h"
 #include "TextureMappingWorld.h"
 #include "CheckerTextureWorld.h"
+#include "SimpleLightWorld.h"
 
 #define cout fout
 #define MAX_TRACING_TIMES 3		//最大追踪次数
@@ -162,82 +163,82 @@ vec3 color(const ray& r) {		//C++中，传的参数如果是引用类型，定义的时候需要使用&
 
 
 
-HitableList* getHitableWorld() {
-	//加入扰动
-	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0, 0, -1)), 0.5f, new MetalMaterial(vec3(0.8, 0.6, 0.2), 0.1));
-	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(-1, 0, -1)), 0.5f, new DielectricMaterial(1.5f));
-
-	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.125f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
-	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
-	Sphere* sphere5 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.2f, -1)), 0.125f, new DielectricMaterial(0.8f));
-
-	int worldObjectCount = 5;
-	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
-	worldObjectList[0] = sphere1;
-	worldObjectList[1] = sphere2;
-	worldObjectList[2] = sphere3;
-	worldObjectList[3] = sphere4;
-	worldObjectList[4] = sphere5;
-
-	HitableList* world = new HitableList(worldObjectList, worldObjectCount);
-
-	return world;
-}
-
-
-HitableList* getCubicNoiseWorld() {
-	m_worldCamera_Obsoleted = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
-
-	Texture* noiseTexturePtr = new CubicInterpolateNoiseTexture(5.0);
-	Hitable** hitableList = new Hitable * [2];
-	hitableList[0] = new Sphere(vec3(0, -1000, 0), 1000, new LambertianWithTextureMaterial(noiseTexturePtr));
-	hitableList[1] = new Sphere(vec3(0, 2, 0), 2, new LambertianWithTextureMaterial(noiseTexturePtr));
-
-	return new HitableList(hitableList, 2);
-}
-
-
-HitableList* getRandomWorld() {
-
-	m_worldCamera_Obsoleted = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0, 0.0, 1.0);		// 快门时间[0,1]
-	int worldObjectCount = 500;
-
-	Hitable** worldObjectList = new Hitable * [worldObjectCount + 1];
+//HitableList* getHitableWorld() {
+//	//加入扰动
+//	Sphere* sphere1 = new Sphere(Screen::normalizedUVtoReal(vec3(0, 0, -1)), 0.5f, new MetalMaterial(vec3(0.8, 0.6, 0.2), 0.1));
+//	Sphere* sphere2 = new Sphere(Screen::normalizedUVtoReal(vec3(-1, 0, -1)), 0.5f, new DielectricMaterial(1.5f));
+//
+//	Sphere* sphere3 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, 0.5f, -1)), 0.125f, new LambertianMaterial(vec3(0.8, 0.3, 0.3)));
+//	Sphere* sphere4 = new Sphere(Screen::normalizedUVtoReal(vec3(0.5f, -50.0f, -1)), 50.0f, new LambertianMaterial(vec3(0.8, 0.8, 0)));
+//	Sphere* sphere5 = new Sphere(Screen::normalizedUVtoReal(vec3(0.25f, 0.2f, -1)), 0.125f, new DielectricMaterial(0.8f));
+//
+//	int worldObjectCount = 5;
+//	Hitable** worldObjectList = new Hitable * [worldObjectCount];			//指针数组的声明
+//	worldObjectList[0] = sphere1;
+//	worldObjectList[1] = sphere2;
+//	worldObjectList[2] = sphere3;
+//	worldObjectList[3] = sphere4;
+//	worldObjectList[4] = sphere5;
+//
+//	HitableList* world = new HitableList(worldObjectList, worldObjectCount);
+//
+//	return world;
+//}
+//
+//
+//HitableList* getCubicNoiseWorld() {
+//	m_worldCamera_Obsoleted = Camera(vec3(13, 2, 3), vec3::ZERO, vec3::UP, 20, SCREEN_PARAM, 0, 0, 0);
+//
+//	Texture* noiseTexturePtr = new CubicInterpolateNoiseTexture(5.0);
+//	Hitable** hitableList = new Hitable * [2];
+//	hitableList[0] = new Sphere(vec3(0, -1000, 0), 1000, new LambertianWithTextureMaterial(noiseTexturePtr));
+//	hitableList[1] = new Sphere(vec3(0, 2, 0), 2, new LambertianWithTextureMaterial(noiseTexturePtr));
+//
+//	return new HitableList(hitableList, 2);
+//}
 
 
-	Texture* checkerTexture = new Checker_Texture(new SolidColorTexture(vec3(0.2, 0.3, 0.1)), new SolidColorTexture(vec3(0.9, 0.9, 0.9)));
-	LambertianWithTextureMaterial* groundMat = new LambertianWithTextureMaterial(checkerTexture);
-
-	worldObjectList[0] = new Sphere(vec3(0, -1000, 1), 1000, groundMat);
-	int i = 1;
-	for (int a = -WORLD_WIDGET_COUNT; a < WORLD_WIDGET_COUNT; ++a)
-	{
-		for (int b = -WORLD_WIDGET_COUNT; b < WORLD_WIDGET_COUNT; ++b)
-		{
-			float radMat = Utility::getRandom01();
-			vec3 sphereCenter(a + 0.9f * Utility::getRandom01(), 0.2, b + 0.9f * Utility::getRandom01());
-
-			if (radMat < 0.25)
-				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, LambertianMaterial::getRandomAlbedoLambertianMat());
-			else if (radMat < 0.5)	//Y轴上移动
-				worldObjectList[i++] = new Moving_Sphere(sphereCenter, sphereCenter + vec3(0, DRand48::drand48(), 0), 0.2f, 0.0, 1.0, LambertianMaterial::getRandomAlbedoLambertianMat());
-			else if (radMat < 0.75)
-				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, new MetalMaterial(vec3(
-					0.5 * (1 + Utility::getRandom01()),
-					0.5 * (1 + Utility::getRandom01()),
-					0.5 * (1 + Utility::getRandom01())), 0.5 * Utility::getRandom01()));
-			else
-				worldObjectList[i++] = new Sphere(sphereCenter, 0.2, new DielectricMaterial(1.5));
-		}
-	}
-
-	worldObjectList[i++] = new Sphere(vec3(1.5, 1.2, -2.5), 1.2, new DielectricMaterial(1.5));
-	worldObjectList[i++] = new Sphere(vec3(-1, 1.5, -3), 1.5, new LambertianMaterial(vec3(0.4, 0.2, 0.1)));
-	worldObjectList[i++] = new Sphere(vec3(3.5, 1, -2), 1.0, new MetalMaterial(vec3(0.7, 0.6, 0.5), 0));
-
-
-	return new HitableList(worldObjectList, i);
-}
+//HitableList* getRandomWorld() {
+//
+//	m_worldCamera_Obsoleted = Camera(vec3(5, 1.5, 2), vec3(0.5, 1.2, -1), vec3(0, 1, 0), 75.0, SCREEN_PARAM, 2.0, 0.0, 1.0);		// 快门时间[0,1]
+//	int worldObjectCount = 500;
+//
+//	Hitable** worldObjectList = new Hitable * [worldObjectCount + 1];
+//
+//
+//	Texture* checkerTexture = new Checker_Texture(new SolidColorTexture(vec3(0.2, 0.3, 0.1)), new SolidColorTexture(vec3(0.9, 0.9, 0.9)));
+//	LambertianWithTextureMaterial* groundMat = new LambertianWithTextureMaterial(checkerTexture);
+//
+//	worldObjectList[0] = new Sphere(vec3(0, -1000, 1), 1000, groundMat);
+//	int i = 1;
+//	for (int a = -WORLD_WIDGET_COUNT; a < WORLD_WIDGET_COUNT; ++a)
+//	{
+//		for (int b = -WORLD_WIDGET_COUNT; b < WORLD_WIDGET_COUNT; ++b)
+//		{
+//			float radMat = Utility::getRandom01();
+//			vec3 sphereCenter(a + 0.9f * Utility::getRandom01(), 0.2, b + 0.9f * Utility::getRandom01());
+//
+//			if (radMat < 0.25)
+//				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, LambertianMaterial::getRandomAlbedoLambertianMat());
+//			else if (radMat < 0.5)	//Y轴上移动
+//				worldObjectList[i++] = new Moving_Sphere(sphereCenter, sphereCenter + vec3(0, DRand48::drand48(), 0), 0.2f, 0.0, 1.0, LambertianMaterial::getRandomAlbedoLambertianMat());
+//			else if (radMat < 0.75)
+//				worldObjectList[i++] = new Sphere(sphereCenter, 0.2f, new MetalMaterial(vec3(
+//					0.5 * (1 + Utility::getRandom01()),
+//					0.5 * (1 + Utility::getRandom01()),
+//					0.5 * (1 + Utility::getRandom01())), 0.5 * Utility::getRandom01()));
+//			else
+//				worldObjectList[i++] = new Sphere(sphereCenter, 0.2, new DielectricMaterial(1.5));
+//		}
+//	}
+//
+//	worldObjectList[i++] = new Sphere(vec3(1.5, 1.2, -2.5), 1.2, new DielectricMaterial(1.5));
+//	worldObjectList[i++] = new Sphere(vec3(-1, 1.5, -3), 1.5, new LambertianMaterial(vec3(0.4, 0.2, 0.1)));
+//	worldObjectList[i++] = new Sphere(vec3(3.5, 1, -2), 1.0, new MetalMaterial(vec3(0.7, 0.6, 0.5), 0));
+//
+//
+//	return new HitableList(worldObjectList, i);
+//}
 
 
 int main() {
@@ -270,9 +271,9 @@ int main() {
 					float texel_u = (((float)i + DRand48::drand48()) / (RENDER_IMAGE_WIDTH - 1));
 					float texel_v = (((float)j + DRand48::drand48()) / (RENDER_IMAGE_HEIGHT - 1));
 
-					ray cameraRayToPixel = perlinWorld->getWorldCamera().get_camera_ray(texel_u, texel_v);
+					ray cameraRayToPixel = hitableWorld->getWorldCamera().get_camera_ray(texel_u, texel_v);
 
-					pixelColor += color(cameraRayToPixel, perlinWorld->getWorldHitable(), 0);
+					pixelColor += color(cameraRayToPixel, hitableWorld->getWorldHitable(), 0);
 				}
 				pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
 

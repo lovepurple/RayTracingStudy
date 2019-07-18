@@ -5,6 +5,7 @@
 #include "HitableList.h"
 #include "Camera.h"
 #include "LambertianWithTextureMaterial.h"
+#include "Sphere.h"
 
 class WorldBase
 {
