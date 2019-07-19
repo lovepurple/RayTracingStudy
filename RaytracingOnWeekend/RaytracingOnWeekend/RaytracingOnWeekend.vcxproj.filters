@@ -36,6 +36,7 @@
     <ClCompile Include="XY_Rect.cpp" />
     <ClCompile Include="YZ_Rect.cpp" />
     <ClCompile Include="XZ_Rect.cpp" />
+    <ClCompile Include="CornellBoxWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
@@ -73,5 +74,8 @@
     <ClInclude Include="XY_Rect.h" />
     <ClInclude Include="YZ_Rect.h" />
     <ClInclude Include="XZ_Rect.h" />
+    <ClInclude Include="CornellBoxWorld.h" />
+    <ClInclude Include="RectCollection.h" />
+    <ClInclude Include="WorldCollection.h" />
   </ItemGroup>
 </Project>

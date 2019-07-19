@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include "Moving_Sphere.h"
 #include "float.h"
 #include "Utility.h"
 #include "LambertianMaterial.h"
@@ -10,13 +9,10 @@
 #include "CubicInterpolateNoiseTexture.h"
 #include "DielectricMaterial.h"
 #include <time.h>
-#include "PerlinNoiseWorld.h"
-#include "TextureMappingWorld.h"
-#include "CheckerTextureWorld.h"
-#include "SimpleLightWorld.h"
+#include "WorldCollection.h"
 
 #define cout fout
-#define MAX_TRACING_TIMES 3		//最大追踪次数
+#define MAX_TRACING_TIMES 10		//最大追踪次数
 #define WORLD_WIDGET_COUNT 5
 
 
@@ -250,7 +246,7 @@ int main() {
 			2. 为了方便计算，所有的坐标都是按[0,1]计算，因此像素实际的位置需要*screenParam
 	*/
 
-	WorldBase* hitableWorld = new SimpleLightWorld();
+	WorldBase* hitableWorld = new CornellBoxWorld();
 
 	try
 	{
@@ -274,7 +270,7 @@ int main() {
 				pixelColor /= (float)ANTI_ANTIALIASING_TIMES;
 
 				//gamma纠正， color ^ 1/gamma,提亮暗部（多次追踪后，颜色一次次衰减太暗）
-				//pixelColor = toGammaColor(pixelColor, 0.95f);
+				//pixelColor = toGammaColor(pixelColor, 2.2);
 
 				int ir = int(255.99 * pixelColor[0]);
 				int ig = int(255.99 * pixelColor[1]);

@@ -130,6 +130,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CheckerTextureWorld.h" />
     <ClInclude Include="Checker_Texture.h" />
+    <ClInclude Include="CornellBoxWorld.h" />
     <ClInclude Include="CubicInterpolateNoiseTexture.h" />
     <ClInclude Include="DielectricMaterial.h" />
     <ClInclude Include="DiffuseLight.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="PerlinNoiseTexture.h" />
     <ClInclude Include="PerlinNoiseWorld.h" />
     <ClInclude Include="ray.h" />
+    <ClInclude Include="RectCollection.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="SimpleLightWorld.h" />
     <ClInclude Include="SolidColorTexture.h" />
@@ -157,6 +159,7 @@
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vec3.h" />
     <ClInclude Include="WorldBase.h" />
+    <ClInclude Include="WorldCollection.h" />
     <ClInclude Include="XY_Rect.h" />
     <ClInclude Include="XZ_Rect.h" />
     <ClInclude Include="YZ_Rect.h" />
@@ -167,6 +170,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CheckerTextureWorld.cpp" />
     <ClCompile Include="Checker_Texture.cpp" />
+    <ClCompile Include="CornellBoxWorld.cpp" />
     <ClCompile Include="CubicInterpolateNoiseTexture.cpp" />
     <ClCompile Include="DielectricMaterial.cpp" />
     <ClCompile Include="DiffuseLight.cpp" />

@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "LambertianWithTextureMaterial.h"
 #include "Sphere.h"
+#include "Moving_Sphere.h"
+
 
 class WorldBase
 {
