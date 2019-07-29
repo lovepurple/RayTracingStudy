@@ -115,3 +115,20 @@ vec3 Utility::get_uv_by_sphere_point(const vec3 pointOnSphere)
 
 	return vec3(u, v);
 }
+
+float Utility::clamp(float val, float min, float max)
+{
+	if (val < min)
+		return min;
+	else if (val > max)
+		return max;
+
+	return val;
+}
+
+int Utility::clamp(int val, int min, int max)
+{
+	return (int)clamp((float)val, (float)min, (float)max);
+}
+
+

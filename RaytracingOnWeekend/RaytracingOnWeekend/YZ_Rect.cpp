@@ -1,6 +1,6 @@
 #include "YZ_Rect.h"
 
-YZ_Rect::YZ_Rect(float yMin, float yMax, float zMin, float zMax, float x, Material* mat)
+YZ_Rect::YZ_Rect(float yMin, float yMax, float zMin, float zMax, float x, Material* mat, vec3 normal)
 {
 	this->m_yMin = yMin;
 	this->m_yMax = yMax;
@@ -8,6 +8,7 @@ YZ_Rect::YZ_Rect(float yMin, float yMax, float zMin, float zMax, float x, Materi
 	this->m_zMax = zMax;
 	this->m_x = x;
 	this->m_mat = mat;
+	this->m_normal = normal;
 
 	this->m_hitableObjectAABB = getHitable_AABB(0, 0);
 }
@@ -23,7 +24,7 @@ bool YZ_Rect::Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) co
 		return false;
 
 	hitInfo.HitPoint = hitPoint;
-	hitInfo.HitPointNormal = vec3(1, 0, 0);
+	hitInfo.HitPointNormal = this->m_normal;
 	hitInfo.hitPointUV = vec3((hitPoint.y() - m_yMin) / (m_yMax - m_yMin), (hitPoint.z() - m_zMin) / (m_zMax - m_zMin));
 	hitInfo.mat_ptr = this->m_mat;
 	hitInfo.HitRay_Factor = factor;

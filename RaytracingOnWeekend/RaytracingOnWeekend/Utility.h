@@ -97,5 +97,9 @@ public:
 
 	*/
 	static vec3 get_uv_by_sphere_point(const vec3 pointOnSphere);
+
+	static float clamp(float val,float min,float max);
+
+	static int clamp(int val, int min, int max);
 };
 

@@ -271,10 +271,10 @@ int main() {
 
 				//gamma纠正， color ^ 1/gamma,提亮暗部（多次追踪后，颜色一次次衰减太暗）
 				//pixelColor = toGammaColor(pixelColor, 2.2);
-
-				int ir = int(255.99 * pixelColor[0]);
-				int ig = int(255.99 * pixelColor[1]);
-				int ib = int(255.99 * pixelColor[2]);
+				pixelColor = vec3(sqrt(pixelColor[0]), sqrt(pixelColor[1]), sqrt(pixelColor[2]));
+				int ir = Utility::clamp(int(255.99 * pixelColor[0]), 0, 255);
+				int ig = Utility::clamp(int(255.99 * pixelColor[1]), 0, 255);
+				int ib = Utility::clamp(int(255.99 * pixelColor[2]), 0, 255);
 
 				cout << ir << " " << ig << " " << ib << " ";
 

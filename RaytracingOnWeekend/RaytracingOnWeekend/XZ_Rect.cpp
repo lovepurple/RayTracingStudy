@@ -1,6 +1,6 @@
 #include "XZ_Rect.h"
 
-XZ_Rect::XZ_Rect(float xMin, float xMax, float zMin, float zMax, float y, Material* mat)
+XZ_Rect::XZ_Rect(float xMin, float xMax, float zMin, float zMax, float y, Material* mat, vec3 normal)
 {
 	this->m_xMin = xMin;
 	this->m_xMax = xMax;
@@ -8,6 +8,7 @@ XZ_Rect::XZ_Rect(float xMin, float xMax, float zMin, float zMax, float y, Materi
 	this->m_zMax = zMax;
 	this->m_y = y;
 	this->m_mat = mat;
+	this->m_normal = normal;
 
 	this->m_hitableObjectAABB = getHitable_AABB(0, 0);
 }
@@ -25,7 +26,7 @@ bool XZ_Rect::Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) co
 
 	hitInfo.HitPoint = hitPoint;
 	hitInfo.hitPointUV = vec3((hitPoint.x() - m_xMin) / (m_xMax - m_xMin), (hitPoint.z() - m_zMin) / (m_zMax - m_zMin));
-	hitInfo.HitPointNormal = vec3::UP;
+	hitInfo.HitPointNormal = this->m_normal;
 	hitInfo.HitRay_Factor = factor;
 	hitInfo.mat_ptr = this->m_mat;
 

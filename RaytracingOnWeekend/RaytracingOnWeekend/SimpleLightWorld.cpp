@@ -18,7 +18,7 @@ HitableList* SimpleLightWorld::getWorldHitable()
 		worldHitableList[m_worldObjectCount++] = new Sphere(vec3(0, -100, 0), 1000, perlinMat);
 		worldHitableList[m_worldObjectCount++] = new Sphere(vec3::ZERO, 2, perlinMat);
 		worldHitableList[m_worldObjectCount++] = new Sphere(vec3(0, 5, 0), 2, lightMat);
-		worldHitableList[m_worldObjectCount++] = new XY_Rect(2, 5, -2, 2, -2, lightMat);
+		worldHitableList[m_worldObjectCount++] = new XY_Rect(2, 5, -2, 2, -2, lightMat, vec3(0, 0, 1));
 
 		this->m_worldObjectList = new HitableList(worldHitableList, this->m_worldObjectCount);
 	}

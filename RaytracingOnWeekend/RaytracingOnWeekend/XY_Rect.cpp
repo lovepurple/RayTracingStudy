@@ -1,6 +1,6 @@
 #include "XY_Rect.h"
 
-XY_Rect::XY_Rect(float xmin, float xmax, float ymin, float ymax, float z, Material* mat)
+XY_Rect::XY_Rect(float xmin, float xmax, float ymin, float ymax, float z, Material* mat, vec3 normal)
 {
 	this->m_xmin = xmin;
 	this->m_xmax = xmax;
@@ -8,6 +8,7 @@ XY_Rect::XY_Rect(float xmin, float xmax, float ymin, float ymax, float z, Materi
 	this->m_ymax = ymax;
 	this->m_z = z;
 	this->m_matPtr = mat;
+	this->m_normal = normal;
 }
 
 bool XY_Rect::Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) const
@@ -27,7 +28,7 @@ bool XY_Rect::Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) co
 	float hitPointV = (hitPointY - m_ymin) / (m_ymax - m_ymin);
 
 	hitInfo.HitPoint = vec3(hitPointX, hitPointY, m_z);
-	hitInfo.HitPointNormal = vec3(0, 0, 1);
+	hitInfo.HitPointNormal = this->m_normal;
 	hitInfo.hitPointUV = vec3(hitPointU, hitPointV);
 	hitInfo.HitRay_Factor = factor;
 	hitInfo.mat_ptr = this->m_matPtr;

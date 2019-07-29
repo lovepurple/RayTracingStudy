@@ -9,7 +9,7 @@ class XY_Rect :
 {
 public:
 	XY_Rect() {}
-	XY_Rect(float xmin, float xmax, float ymin, float ymax, float z, Material* mat);
+	XY_Rect(float xmin, float xmax, float ymin, float ymax, float z, Material* mat, vec3 normal);
 
 	virtual bool Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) const override;
 
@@ -22,5 +22,6 @@ private:
 	float m_ymin, m_ymax;
 	float m_z;		//¾ØÐÎzµÄ×ø±ê
 	Material* m_matPtr;
+	vec3 m_normal;
 };
 

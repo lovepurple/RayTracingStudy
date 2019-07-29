@@ -1,5 +1,4 @@
-#ifndef VEC3H
-#define VEC3H
+#pragma once
 
 #include <math.h>
 #include <stdlib.h>
@@ -8,7 +7,8 @@
 class vec3
 {
 public:
-	vec3() {}
+	vec3() { e[0] = e[1] = e[2] = 0; }
+	vec3(float val) { e[0] = val, e[1] = val, e[2] = val; }
 	vec3(float e0, float e1, float e2) { e[0] = e0, e[1] = e1, e[2] = e2; }
 	vec3(float e0, float e1) { e[0] = e0, e[1] = e1, e[2] = 0; }
 
@@ -54,6 +54,10 @@ public:
 	static vec3 ONE;
 	static vec3 UP;
 	static vec3 DOWN;
+	static vec3 LEFT;
+	static vec3 RIGHT;
+	static vec3 FORWARD;
+	static vec3 BACK;
 };
 
 
@@ -271,5 +275,3 @@ std::ostream& operator<<(std::ostream& out, vec3& v) {
 	std::cout << v.e[0] << "," << v.e[1] << "," << v.e[2] << std::endl;
 	return out;
 }*/
-
-#endif

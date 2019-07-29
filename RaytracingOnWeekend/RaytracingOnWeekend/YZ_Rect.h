@@ -8,7 +8,7 @@ class YZ_Rect :
 {
 public:
 	YZ_Rect() {}
-	YZ_Rect(float yMin, float yMax, float zMin, float zMax, float x, Material* mat);
+	YZ_Rect(float yMin, float yMax, float zMin, float zMax, float x, Material* mat, vec3 normal);
 
 
 	virtual bool Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) const override;
@@ -21,5 +21,6 @@ private:
 	float m_zMin, m_zMax;
 	float m_x;
 	Material* m_mat;
+	vec3 m_normal;
 };
 

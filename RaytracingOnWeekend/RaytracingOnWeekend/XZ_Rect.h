@@ -9,7 +9,7 @@ class XZ_Rect :
 {
 public:
 	XZ_Rect() {}
-	XZ_Rect(float xMin, float xMax, float zMin, float zMax, float y, Material* mat);
+	XZ_Rect(float xMin, float xMax, float zMin, float zMax, float y, Material* mat, vec3 normal);
 
 
 	virtual bool Hit(const ray& ray, float t_min, float t_max, HitInfo& hitInfo) const override;
@@ -23,5 +23,6 @@ private:
 	float m_y;
 
 	Material* m_mat;
+	vec3 m_normal;
 };
 

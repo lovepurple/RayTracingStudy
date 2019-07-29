@@ -1,12 +1,12 @@
 #pragma once
 #include "Material.h"
-#include "Texture.h"
+#include "SolidColorTexture.h"
 
 class DiffuseLight :
 	public Material
 {
 public:
-	DiffuseLight() {}
+	DiffuseLight() { this->m_matTexturePtr = &SolidColorTexture::BLACK_TEXTURE; }
 	DiffuseLight(Texture* tex);
 
 

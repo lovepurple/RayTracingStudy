@@ -7,15 +7,18 @@ HitableList* CornellBoxWorld::getWorldHitable()
 		Material* redMat = new LambertianWithTextureMaterial(new SolidColorTexture(vec3(0.65, 0.05, 0.05)));
 		Material* whiteMat = new LambertianWithTextureMaterial(new SolidColorTexture(vec3(0.73, 0.73, 0.73)));
 		Material* greenMat = new LambertianWithTextureMaterial(new SolidColorTexture(vec3(0.12, 0.45, 0.15)));
-		Material* light = new DiffuseLight(new SolidColorTexture(vec3(120, 120, 120)));			//因为需要多次追踪，逐次递减，所以取数值大一些使结果更亮。
+
+		Material* light = new DiffuseLight(new SolidColorTexture(vec3(18, 18, 18)));			//因为需要多次追踪，逐次递减，所以取数值大一些使结果更亮。
 
 		Hitable** hitableObjectList = new Hitable * [100];
 
-		hitableObjectList[this->m_worldObjectCount++] = new YZ_Rect(0, 555, 0, 555, 555, greenMat);
-		hitableObjectList[this->m_worldObjectCount++] = new YZ_Rect(0, 555, 0, 555, 0, redMat);
-		hitableObjectList[this->m_worldObjectCount++] = new XZ_Rect(213, 343, 227, 332, 554, light);
-		hitableObjectList[this->m_worldObjectCount++] = new XZ_Rect(0, 555, 0, 555, 0, whiteMat);
-		hitableObjectList[this->m_worldObjectCount++] = new XY_Rect(0, 555, 0, 555, 555, whiteMat);
+		hitableObjectList[this->m_worldObjectCount++] = new YZ_Rect(0, 555, 0, 555, 555, greenMat, vec3::LEFT);
+		hitableObjectList[this->m_worldObjectCount++] = new YZ_Rect(0, 555, 0, 555, 0, redMat, vec3::RIGHT);
+		hitableObjectList[this->m_worldObjectCount++] = new XZ_Rect(213, 343, 227, 332, 554, light, vec3::UP);
+		hitableObjectList[this->m_worldObjectCount++] = new XZ_Rect(0, 555, 0, 555, 555, whiteMat, vec3::DOWN);
+		hitableObjectList[this->m_worldObjectCount++] = new XZ_Rect(0, 555, 0, 555, 0, whiteMat, vec3::UP);
+		hitableObjectList[this->m_worldObjectCount++] = new XY_Rect(0, 555, 0, 555, 555, whiteMat, vec3::BACK);
+
 
 		this->m_worldObjectList = new HitableList(hitableObjectList, this->m_worldObjectCount);
 	}
